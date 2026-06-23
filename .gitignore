@@ -1,0 +1,8 @@
+/react-app/node_modules
+/react-app/public/build
+/react-app/public/fonts-manifest.dev.json
+/react-app/public/hot
+/react-app/public/storage
+/php-app/storage/*.key
+/php-app/storage/pail
+/php-app/vendor
