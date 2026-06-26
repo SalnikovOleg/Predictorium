@@ -2,30 +2,31 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\PermissionResource\Pages;
+use App\Filament\Resources\TournamentConfigResource\Pages;
+use App\Models\MarketTemplate;
+use App\Models\TournamentConfig;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
-use Spatie\Permission\Models\Permission;
 use UnitEnum;
 
-class PermissionResource extends \Filament\Resources\Resource
+class TournamentConfigResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = Permission::class;
+    protected static ?string $model = TournamentConfig::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-key';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-cog-6-tooth';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 5;
 
-    protected static ?string $modelLabel = 'Permission';
+    protected static ?string $modelLabel = 'Tournament Config';
 
-    protected static ?string $pluralModelLabel = 'Permissions';
+    protected static ?string $pluralModelLabel = 'Tournament Configs';
 
     public static function form(Schema $schema): Schema
     {
@@ -35,15 +36,15 @@ class PermissionResource extends \Filament\Resources\Resource
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
-                            ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('guard_name')
-                            ->default('web')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('description')
-                            ->maxLength(255),
-                    ])->columns(2),
+                        Forms\Components\Textarea::make('rules_json')
+                            ->rows(5),
+                        Forms\Components\Select::make('market_template_ids')
+                            ->options(MarketTemplate::pluck('name', 'id'))
+                            ->multiple()
+                            ->searchable()
+                            ->preload(),
+                    ]),
             ]);
     }
 
@@ -56,13 +57,6 @@ class PermissionResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('guard_name')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('description')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('roles_count')
-                    ->counts('roles')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -73,15 +67,10 @@ class PermissionResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('guard_name')
-                    ->options([
-                        'web' => 'Web',
-                        'api' => 'API',
-                    ]),
+                //
             ])
             ->actions([
                 Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
@@ -98,9 +87,9 @@ class PermissionResource extends \Filament\Resources\Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListPermissions::route('/'),
-            'create' => Pages\CreatePermission::route('/create'),
-            'edit' => Pages\EditPermission::route('/{record}/edit'),
+            'index' => Pages\ListTournamentConfigs::route('/'),
+            'create' => Pages\CreateTournamentConfig::route('/create'),
+            'edit' => Pages\EditTournamentConfig::route('/{record}/edit'),
         ];
     }
 }

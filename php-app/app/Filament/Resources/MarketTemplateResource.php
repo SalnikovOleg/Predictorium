@@ -2,30 +2,32 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
+use App\Filament\Resources\MarketTemplateResource\Pages;
+use App\Models\MarketTemplate;
+use App\Models\MarketType;
+use App\Models\OutcomeTemplate;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class UserResource extends \Filament\Resources\Resource
+class MarketTemplateResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = MarketTemplate::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-squares-2x2';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 4;
 
-    protected static ?string $modelLabel = 'User';
+    protected static ?string $modelLabel = 'Market Template';
 
-    protected static ?string $pluralModelLabel = 'Users';
+    protected static ?string $pluralModelLabel = 'Market Templates';
 
     public static function form(Schema $schema): Schema
     {
@@ -36,25 +38,16 @@ class UserResource extends \Filament\Resources\Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
+                        Forms\Components\Select::make('market_type_id')
+                            ->relationship('marketType', 'name')
                             ->required()
-                            ->unique(ignoreRecord: true)
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->dehydrated(fn ($state): bool => filled($state))
-                            ->maxLength(255),
-                    ])->columns(2),
-
-                Section::make('Roles')
-                    ->schema([
-                        Forms\Components\CheckboxList::make('roles')
-                            ->relationship('roles', 'name')
-                            ->columns(2)
                             ->searchable()
-                            ->bulkToggleable(),
+                            ->preload(),
+                        Forms\Components\Select::make('outcome_template_ids')
+                            ->options(OutcomeTemplate::pluck('name', 'id'))
+                            ->multiple()
+                            ->searchable()
+                            ->preload(),
                     ]),
             ]);
     }
@@ -68,11 +61,7 @@ class UserResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->badge()
+                Tables\Columns\TextColumn::make('marketType.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -104,9 +93,9 @@ class UserResource extends \Filament\Resources\Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListMarketTemplates::route('/'),
+            'create' => Pages\CreateMarketTemplate::route('/create'),
+            'edit' => Pages\EditMarketTemplate::route('/{record}/edit'),
         ];
     }
 }

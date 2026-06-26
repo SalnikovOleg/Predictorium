@@ -2,30 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
+use App\Filament\Resources\CategoryResource\Pages;
+use App\Models\Category;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class UserResource extends \Filament\Resources\Resource
+class CategoryResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = Category::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-tag';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
     protected static ?int $navigationSort = 0;
 
-    protected static ?string $modelLabel = 'User';
+    protected static ?string $modelLabel = 'Category';
 
-    protected static ?string $pluralModelLabel = 'Users';
+    protected static ?string $pluralModelLabel = 'Categories';
 
     public static function form(Schema $schema): Schema
     {
@@ -36,26 +36,18 @@ class UserResource extends \Filament\Resources\Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
+                        Forms\Components\TextInput::make('slug')
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->dehydrated(fn ($state): bool => filled($state))
+                        Forms\Components\TextInput::make('icon')
                             ->maxLength(255),
+                        Forms\Components\Toggle::make('is_active')
+                            ->default(true),
+                        Forms\Components\TextInput::make('sort_order')
+                            ->numeric()
+                            ->default(0),
                     ])->columns(2),
-
-                Section::make('Roles')
-                    ->schema([
-                        Forms\Components\CheckboxList::make('roles')
-                            ->relationship('roles', 'name')
-                            ->columns(2)
-                            ->searchable()
-                            ->bulkToggleable(),
-                    ]),
             ]);
     }
 
@@ -68,11 +60,13 @@ class UserResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('email')
+                Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->badge()
+                Tables\Columns\TextColumn::make('icon'),
+                Tables\Columns\IconColumn::make('is_active')
+                    ->boolean(),
+                Tables\Columns\TextColumn::make('sort_order')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -104,9 +98,9 @@ class UserResource extends \Filament\Resources\Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListCategories::route('/'),
+            'create' => Pages\CreateCategory::route('/create'),
+            'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }

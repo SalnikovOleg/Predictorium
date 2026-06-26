@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
+namespace App\Filament\Resources\TournamentConfigResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Resources\TournamentConfigResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Enums\Width;
 
-class EditUser extends EditRecord
+class EditTournamentConfig extends EditRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = TournamentConfigResource::class;
 
     protected Width|string|null $maxContentWidth = '6xl';
 

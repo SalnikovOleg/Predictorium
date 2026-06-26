@@ -7,6 +7,7 @@ use BackedEnum;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Spatie\Permission\Models\Role;
@@ -18,7 +19,7 @@ class RoleResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-user-group';
 
-    protected static UnitEnum|string|null $navigationGroup = 'User Management';
+    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
 
     protected static ?int $navigationSort = 1;
 
@@ -42,13 +43,13 @@ class RoleResource extends \Filament\Resources\Resource
                             ->maxLength(255),
                         Forms\Components\TextInput::make('description')
                             ->maxLength(255),
-                    ])->columns(3),
+                    ])->columns(2),
 
                 Section::make('Permissions')
                     ->schema([
                         Forms\Components\CheckboxList::make('permissions')
                             ->relationship('permissions', 'name')
-                            ->columns(3)
+                            ->columns(2)
                             ->searchable()
                             ->bulkToggleable(),
                     ]),
@@ -91,12 +92,12 @@ class RoleResource extends \Filament\Resources\Resource
                     ]),
             ])
             ->actions([
-                Tables\Actions\EditAction::make(),
-                Tables\Actions\DeleteAction::make(),
+                Actions\EditAction::make(),
+                Actions\DeleteAction::make(),
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    Tables\Actions\DeleteBulkAction::make(),
+                Actions\BulkActionGroup::make([
+                    Actions\DeleteBulkAction::make(),
                 ]),
             ]);
     }

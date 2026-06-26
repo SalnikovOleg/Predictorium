@@ -1,15 +1,15 @@
 <?php
 
-namespace App\Filament\Resources\UserResource\Pages;
+namespace App\Filament\Resources\MarketTemplateResource\Pages;
 
-use App\Filament\Resources\UserResource;
+use App\Filament\Resources\MarketTemplateResource;
 use Filament\Actions;
 use Filament\Resources\Pages\EditRecord;
 use Filament\Support\Enums\Width;
 
-class EditUser extends EditRecord
+class EditMarketTemplate extends EditRecord
 {
-    protected static string $resource = UserResource::class;
+    protected static string $resource = MarketTemplateResource::class;
 
     protected Width|string|null $maxContentWidth = '6xl';
 

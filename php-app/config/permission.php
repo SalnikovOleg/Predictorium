@@ -17,6 +17,7 @@ return [
     'column_names' => [
         'model_type' => 'model_type',
         'model_id' => 'model_id',
+        'model_morph_key' => 'model_id',
     ],
 
     'register_permission_check_method' => true,

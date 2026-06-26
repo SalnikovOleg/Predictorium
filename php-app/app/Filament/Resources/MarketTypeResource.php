@@ -2,30 +2,30 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\UserResource\Pages;
-use App\Models\User;
+use App\Filament\Resources\MarketTypeResource\Pages;
+use App\Models\MarketType;
 use BackedEnum;
+use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
-use Filament\Actions;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class UserResource extends \Filament\Resources\Resource
+class MarketTypeResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = User::class;
+    protected static ?string $model = MarketType::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-building-storefront';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 2;
 
-    protected static ?string $modelLabel = 'User';
+    protected static ?string $modelLabel = 'Market Type';
 
-    protected static ?string $pluralModelLabel = 'Users';
+    protected static ?string $pluralModelLabel = 'Market Types';
 
     public static function form(Schema $schema): Schema
     {
@@ -35,26 +35,8 @@ class UserResource extends \Filament\Resources\Resource
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\TextInput::make('email')
-                            ->email()
-                            ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
-                        Forms\Components\TextInput::make('password')
-                            ->password()
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->dehydrated(fn ($state): bool => filled($state))
-                            ->maxLength(255),
-                    ])->columns(2),
-
-                Section::make('Roles')
-                    ->schema([
-                        Forms\Components\CheckboxList::make('roles')
-                            ->relationship('roles', 'name')
-                            ->columns(2)
-                            ->searchable()
-                            ->bulkToggleable(),
                     ]),
             ]);
     }
@@ -67,12 +49,6 @@ class UserResource extends \Filament\Resources\Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('email')
-                    ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('roles.name')
-                    ->badge()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
@@ -104,9 +80,9 @@ class UserResource extends \Filament\Resources\Resource
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListUsers::route('/'),
-            'create' => Pages\CreateUser::route('/create'),
-            'edit' => Pages\EditUser::route('/{record}/edit'),
+            'index' => Pages\ListMarketTypes::route('/'),
+            'create' => Pages\CreateMarketType::route('/create'),
+            'edit' => Pages\EditMarketType::route('/{record}/edit'),
         ];
     }
 }
