@@ -10,10 +10,12 @@ return new class extends Migration
     {
         Schema::create('tournament_configs', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('category_id');
             $table->string('name');
             $table->json('rules_json')->nullable();
             $table->json('market_template_ids')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

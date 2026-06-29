@@ -47,6 +47,9 @@ php artisan test --filter=ExampleTest
 # From D:\projects\Predictorium
 docker compose up -d
 # nginx:80, phpmyadmin:8080, react:3000, mysql:3306
+
+# Run php artisan 
+docker exec -i predictum-backend php artisan [command]
 ```
 
 ## Gotchas

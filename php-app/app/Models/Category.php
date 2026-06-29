@@ -26,4 +26,14 @@ class Category extends Model
     {
         return $this->hasMany(Tournament::class);
     }
+
+    public function participants()
+    {
+        return $this->hasMany(Participant::class);
+    }
+
+    public function resultTypes()
+    {
+        return $this->hasMany(ResultType::class);
+    }
 }

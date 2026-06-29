@@ -21,7 +21,7 @@ class TournamentResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-trophy';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Tournaments';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading';
 
     protected static ?int $navigationSort = 0;
 

@@ -11,9 +11,13 @@ return new class extends Migration
         Schema::create('market_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->foreignId('market_type_id')->constrained()->cascadeOnDelete();
-            $table->json('outcome_template_ids')->nullable();
+            $table->foreignId('category_id');
+            $table->foreignId('market_type_id')->constrained();
+            $table->json('outcome_type_ids')->nullable();
+            $table->integer('param1')->nullable();
+            $table->integer('param2')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

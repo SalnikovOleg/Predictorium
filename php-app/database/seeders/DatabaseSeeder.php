@@ -16,19 +16,24 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
         $this->call([
-            RolesAndPermissionsSeeder::class,
+           RolesAndPermissionsSeeder::class,
+           CategorySeeder::class,
+           MarketTypeSeeder::class,
+           OutcomeTypeSeeder::class,
+           MarketTemplateSeeder::class,
+           ResultTypeSeeder::class,
         ]);
 
         $admin = User::firstOrCreate(
-            ['email' => 'admin@example.com'],
-            [
-                'name' => 'Admin',
-                'password' => bcrypt('password'),
-            ]
+             ['email' => 'admin@example.com'],
+             [
+                 'name' => 'Admin',
+                 'password' => bcrypt('password'),
+             ]
         );
 
         if (! $admin->hasRole('admin')) {
-            $admin->assignRole('admin');
+             $admin->assignRole('admin');
         }
     }
 }

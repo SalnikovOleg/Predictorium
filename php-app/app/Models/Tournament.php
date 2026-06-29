@@ -34,4 +34,9 @@ class Tournament extends Model
     {
         return $this->belongsTo(TournamentConfig::class, 'config_id');
     }
+
+    public function events()
+    {
+        return $this->hasMany(Event::class);
+    }
 }
