@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4cc971be9eccbef9370da4a656bc5066",
+    "content-hash": "74af68e9b991dd9b170c8cd0353255df",
     "packages": [
         {
             "name": "bezhansalleh/filament-plugin-essentials",
@@ -8215,6 +8215,83 @@
                 }
             ],
             "time": "2026-06-12T18:19:46+00:00"
+        },
+        {
+            "name": "van-ons/filament-navigation",
+            "version": "v2.0.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/VanOns/filament-navigation.git",
+                "reference": "a36e19168f4ed45ae2ae175cc40ce50f3a993b4e"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/VanOns/filament-navigation/zipball/a36e19168f4ed45ae2ae175cc40ce50f3a993b4e",
+                "reference": "a36e19168f4ed45ae2ae175cc40ce50f3a993b4e",
+                "shasum": ""
+            },
+            "require": {
+                "filament/filament": "^4.0|^5.0",
+                "illuminate/contracts": "^11.0|^12.0|^13.0",
+                "php": "^8.2|^8.3",
+                "spatie/laravel-package-tools": "^1.92"
+            },
+            "require-dev": {
+                "friendsofphp/php-cs-fixer": "^3.87",
+                "larastan/larastan": "^3.6",
+                "nunomaduro/collision": "^8.8",
+                "orchestra/canvas": "^9.0|^10.0|^11.0",
+                "orchestra/testbench": "^9.0|^10.0|^11.0",
+                "pestphp/pest": "^3.8|^4.0",
+                "pestphp/pest-plugin-laravel": "^3.2|^4.0",
+                "phpstan/extension-installer": "^1.4",
+                "phpstan/phpstan-deprecation-rules": "^2.0",
+                "phpstan/phpstan-phpunit": "^2.0",
+                "phpunit/phpunit": "^11.5|^12.0",
+                "spatie/laravel-ray": "^1.40"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "VanOns\\FilamentNavigation\\FilamentNavigationServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "VanOns\\FilamentNavigation\\": "src",
+                    "VanOns\\FilamentNavigation\\Database\\Factories\\": "database/factories"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Van Ons",
+                    "email": "opensource@van-ons.nl",
+                    "role": "Developer"
+                },
+                {
+                    "name": "Ryan Chandler",
+                    "email": "support@ryangjchandler.co.uk",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Build structured navigation menus in Filament.",
+            "homepage": "https://github.com/VanOns/filament-navigation",
+            "keywords": [
+                "filament",
+                "laravel",
+                "navigation"
+            ],
+            "support": {
+                "issues": "https://github.com/VanOns/filament-navigation/issues",
+                "source": "https://github.com/VanOns/filament-navigation/tree/v2.0.2"
+            },
+            "time": "2026-04-10T09:55:24+00:00"
         },
         {
             "name": "vlucas/phpdotenv",

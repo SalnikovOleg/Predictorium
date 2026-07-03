@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MarketResource\RelationManagers;
 
+use App\Models\Outcome;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
@@ -22,12 +23,14 @@ class OutcomesRelationManager extends RelationManager
                     ->relationship('outcomeType', 'name')
                     ->searchable()
                     ->preload()
+                    ->disabled(fn (?Outcome $record) => $record !== null)
                     ->required(),
 
                 Forms\Components\Select::make('participant_id')
                     ->label('Participant')
                     ->relationship('participant', 'name')
                     ->searchable()
+                    ->disabled(fn (?Outcome $record) => $record !== null)
                     ->preload(),
 
                 Forms\Components\TextInput::make('coef')
@@ -85,9 +88,9 @@ class OutcomesRelationManager extends RelationManager
             ->headerActions([
                 Actions\CreateAction::make(),
             ])
-            ->actions([
-                Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+            ->recordActions([
+                Actions\EditAction::make()->label(''),
+                Actions\DeleteAction::make()->label(''),
             ])
             ->toolbarActions([
                 Actions\BulkActionGroup::make([
