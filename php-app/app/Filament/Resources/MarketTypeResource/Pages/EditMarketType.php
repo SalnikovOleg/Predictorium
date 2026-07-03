@@ -11,8 +11,6 @@ class EditMarketType extends EditRecord
 {
     protected static string $resource = MarketTypeResource::class;
 
-    protected Width|string|null $maxContentWidth = '6xl';
-
     protected function getHeaderActions(): array
     {
         return [

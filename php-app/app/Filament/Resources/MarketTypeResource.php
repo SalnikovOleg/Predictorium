@@ -45,30 +45,22 @@ class MarketTypeResource extends \Filament\Resources\Resource
     {
         return $table
             ->columns([
-                Tables\Columns\TextColumn::make('id')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('name')
-                    ->searchable()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('id'),
+                Tables\Columns\TextColumn::make('name'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
-                    ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
-            ->actions([
-                Actions\EditAction::make(),
+            ->recordActions([
+                Actions\EditAction::make()->label(''),
             ])
-            ->bulkActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+            ->toolbarActions([
             ]);
     }
 
@@ -81,8 +73,6 @@ class MarketTypeResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListMarketTypes::route('/'),
-            'create' => Pages\CreateMarketType::route('/create'),
-            'edit' => Pages\EditMarketType::route('/{record}/edit'),
         ];
     }
 }

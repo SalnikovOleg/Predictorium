@@ -78,10 +78,7 @@ class MarketTemplateResource extends \Filament\Resources\Resource
             ->actions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+            ->toolbarActions([
             ]);
     }
 
@@ -94,8 +91,6 @@ class MarketTemplateResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListMarketTemplates::route('/'),
-            'create' => Pages\CreateMarketTemplate::route('/create'),
-            'edit' => Pages\EditMarketTemplate::route('/{record}/edit'),
         ];
     }
 }

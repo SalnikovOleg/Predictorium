@@ -115,7 +115,7 @@ class MarketResource extends \Filament\Resources\Resource
                             }),
 
                         Forms\Components\Select::make('participant_ids')
-                            ->label(fn (Get $get) => 'Select Participants (max ' . ($get('param1') ?? '?') . ')')
+                            ->label(fn (Get $get) => 'Select Participants')
                             ->options(function (Get $get) {
                                 $eventId = $get('event_id') ?? request()->query('event_id');
                                 if (! $eventId) {
@@ -162,7 +162,6 @@ class MarketResource extends \Filament\Resources\Resource
 
                         Forms\Components\Hidden::make('param1'),
                     ])
-                    ->columns(2),
             ]);
     }
 
@@ -176,9 +175,9 @@ class MarketResource extends \Filament\Resources\Resource
                     ->label('Template')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('marketTemplate.marketType.name')
-                    ->label('Type'),
-                Tables\Columns\TextColumn::make('description')
+                    ->label('Type')
                     ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('description'),
                 Tables\Columns\TextColumn::make('outcomes_count')
                     ->counts('outcomes')
                     ->label('Outcomes')
@@ -194,7 +193,7 @@ class MarketResource extends \Filament\Resources\Resource
 //                    ->label('Event'),
             ])
             ->actions([
-                //Actions\EditAction::make(),
+                Actions\DeleteAction::make()->label(''),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
@@ -205,7 +204,9 @@ class MarketResource extends \Filament\Resources\Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            MarketResource\RelationManagers\OutcomesRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

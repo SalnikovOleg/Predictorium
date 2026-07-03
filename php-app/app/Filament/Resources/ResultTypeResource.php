@@ -47,7 +47,7 @@ class ResultTypeResource extends \Filament\Resources\Resource
                                 'participant' => 'Participant',
                             ])
                             ->required(),
-                    ])->columns(2),
+                    ]),
             ]);
     }
 
@@ -83,13 +83,10 @@ class ResultTypeResource extends \Filament\Resources\Resource
                         'participant' => 'Participant',
                     ]),
             ])
-            ->actions([
-                Actions\EditAction::make(),
+            ->recordActions([
+                Actions\EditAction::make()->label(''),
             ])
-            ->bulkActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+            ->toolbarActions([
             ]);
     }
 
@@ -102,8 +99,6 @@ class ResultTypeResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListResultTypes::route('/'),
-            'create' => Pages\CreateResultType::route('/create'),
-            'edit' => Pages\EditResultType::route('/{record}/edit'),
         ];
     }
 }

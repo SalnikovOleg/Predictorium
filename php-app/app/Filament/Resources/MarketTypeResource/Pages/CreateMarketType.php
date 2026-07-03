@@ -9,6 +9,4 @@ use Filament\Support\Enums\Width;
 class CreateMarketType extends CreateRecord
 {
     protected static string $resource = MarketTypeResource::class;
-
-    protected Width|string|null $maxContentWidth = '6xl';
 }
