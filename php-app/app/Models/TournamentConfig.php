@@ -10,6 +10,7 @@ class TournamentConfig extends Model
     use SoftDeletes;
     
     protected $fillable = [
+        'category_id',
         'name',
         'rules_json',
         'market_template_ids',
@@ -21,6 +22,11 @@ class TournamentConfig extends Model
             'rules_json' => 'array',
             'market_template_ids' => 'array',
         ];
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 
     public function tournaments()

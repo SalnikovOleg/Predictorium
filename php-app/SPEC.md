@@ -34,7 +34,7 @@ market_type_id: Defines how the market is constructed.
 
 outcome_type_ids: Determines the allowed outcome types.
 
-param1: Configurable integer (e.g., number of participants to select: 1 for "Winner", 3 for "Podium").
+param1: Configurable integer (e.g., number of participants to customer's select for stake : 1 for "Winner", 3 for "Podium").
 
 param2: Reserved for future logic.
 

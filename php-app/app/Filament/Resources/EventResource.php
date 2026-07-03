@@ -3,6 +3,8 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\EventResource\Pages;
+use App\Filament\Resources\MarketResource;
+use App\Filament\Resources\ResultResource;
 use App\Models\Event;
 use BackedEnum;
 use Filament\Actions;
@@ -36,6 +38,10 @@ class EventResource extends \Filament\Resources\Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('slug')
+                            ->required()
+                            ->maxLength(255)
+                            ->unique(ignoreRecord: true),
                         Forms\Components\Select::make('tournament_id')
                             ->relationship('tournament', 'name')
                             ->required()
@@ -74,6 +80,10 @@ class EventResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('slug')
+                    ->searchable()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('tournament.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
@@ -109,6 +119,14 @@ class EventResource extends \Filament\Resources\Resource
             ])
             ->actions([
                 Actions\EditAction::make(),
+                Actions\Action::make('markets')
+                    ->label('Markets')
+                    ->icon('heroicon-o-banknotes')
+                    ->url(fn (Event $record): string => MarketResource::getUrl('index', ['tableFilters' => ['event_id' => $record->id]])),
+                Actions\Action::make('results')
+                    ->label('Results')
+                    ->icon('heroicon-o-document-text')
+                    ->url(fn (Event $record): string => ResultResource::getUrl('index', ['tableFilters' => ['event_id' => $record->id]])),
             ])
             ->bulkActions([
                 Actions\BulkActionGroup::make([
