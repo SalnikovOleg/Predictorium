@@ -5,7 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\MarketTemplateResource\Pages;
 use App\Models\MarketTemplate;
 use App\Models\MarketType;
-use App\Models\OutcomeTemplate;
+use App\Models\OutcomeType;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -44,7 +44,7 @@ class MarketTemplateResource extends \Filament\Resources\Resource
                             ->searchable()
                             ->preload(),
                         Forms\Components\Select::make('outcome_template_ids')
-                            ->options(OutcomeTemplate::pluck('name', 'id'))
+                            ->options(OutcomeType::pluck('name', 'id'))
                             ->multiple()
                             ->searchable()
                             ->preload(),

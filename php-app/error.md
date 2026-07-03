@@ -1,3 +1,5 @@
-Symfony\Component\ErrorHandler\Error\FatalError
-app/Filament/Resources/CategoryResource/Pages/CreateCategory.php:8
-Type of App\Filament\Resources\CategoryResource\Pages\CreateCategory::$maxContentWidth must be Filament\Support\Enums\Width|string|null (as in class Filament\Pages\BasePage)
+GET http://localhost/_debugbar/assets?type=css&mtime=1780559641 net::ERR_ABORTED 500 (Internal Server Error)
+admin:1530  GET http://localhost/_debugbar/assets?type=js&mtime=1780559641 net::ERR_ABORTED 500 (Internal Server Error)
+admin:1534 Uncaught ReferenceError: PhpDebugBar is not defined
+    at HTMLDocument.renderDebugbar (admin:1534:21)
+renderDebugbar @ admin:1534

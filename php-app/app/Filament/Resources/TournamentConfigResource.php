@@ -34,6 +34,11 @@ class TournamentConfigResource extends \Filament\Resources\Resource
             ->schema([
                 Section::make()
                     ->schema([
+                        Forms\Components\Select::make('category_id')
+                            ->relationship('category', 'name')
+                            ->required()
+                            ->searchable()
+                            ->preload(),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -44,7 +49,7 @@ class TournamentConfigResource extends \Filament\Resources\Resource
                             ->multiple()
                             ->searchable()
                             ->preload(),
-                    ]),
+                    ])->columns(2),
             ]);
     }
 
@@ -54,6 +59,9 @@ class TournamentConfigResource extends \Filament\Resources\Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->sortable()
+                    ->searchable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
