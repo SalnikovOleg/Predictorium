@@ -99,10 +99,10 @@ class ResultResource extends \Filament\Resources\Resource
                     ->relationship('resultType', 'name')
                     ->label('Result Type'),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -118,8 +118,6 @@ class ResultResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListResults::route('/'),
-            'create' => Pages\CreateResult::route('/create'),
-            'edit' => Pages\EditResult::route('/{record}/edit'),
         ];
     }
 }

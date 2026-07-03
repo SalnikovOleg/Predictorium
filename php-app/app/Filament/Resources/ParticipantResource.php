@@ -71,10 +71,10 @@ class ParticipantResource extends \Filament\Resources\Resource
                     ->relationship('category', 'name')
                     ->label('Category'),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -90,8 +90,6 @@ class ParticipantResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListParticipants::route('/'),
-            'create' => Pages\CreateParticipant::route('/create'),
-            'edit' => Pages\EditParticipant::route('/{record}/edit'),
         ];
     }
 }

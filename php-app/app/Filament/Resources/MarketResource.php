@@ -192,10 +192,10 @@ class MarketResource extends \Filament\Resources\Resource
 //                    ->relationship('event', 'name')
 //                    ->label('Event'),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\DeleteAction::make()->label(''),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

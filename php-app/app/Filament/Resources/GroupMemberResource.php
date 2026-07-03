@@ -79,10 +79,10 @@ class GroupMemberResource extends \Filament\Resources\Resource
             ])
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -98,8 +98,6 @@ class GroupMemberResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListGroupMembers::route('/'),
-            'create' => Pages\CreateGroupMember::route('/create'),
-            'edit' => Pages\EditGroupMember::route('/{record}/edit'),
         ];
     }
 }

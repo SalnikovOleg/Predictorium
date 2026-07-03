@@ -118,10 +118,10 @@ class TournamentResource extends \Filament\Resources\Resource
                     ->relationship('category', 'name')
                     ->label('Category'),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

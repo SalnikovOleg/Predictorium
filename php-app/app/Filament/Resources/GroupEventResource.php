@@ -75,10 +75,10 @@ class GroupEventResource extends \Filament\Resources\Resource
             ])
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -94,8 +94,6 @@ class GroupEventResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListGroupEvents::route('/'),
-            'create' => Pages\CreateGroupEvent::route('/create'),
-            'edit' => Pages\EditGroupEvent::route('/{record}/edit'),
         ];
     }
 }

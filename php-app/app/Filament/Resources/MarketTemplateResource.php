@@ -75,7 +75,7 @@ class MarketTemplateResource extends \Filament\Resources\Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
             ->toolbarActions([

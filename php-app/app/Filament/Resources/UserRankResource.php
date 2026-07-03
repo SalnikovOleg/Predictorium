@@ -66,10 +66,10 @@ class UserRankResource extends \Filament\Resources\Resource
             ])
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

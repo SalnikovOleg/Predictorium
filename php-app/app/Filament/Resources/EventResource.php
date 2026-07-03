@@ -117,7 +117,7 @@ class EventResource extends \Filament\Resources\Resource
                     ->relationship('tournament', 'name')
                     ->label('Tournament'),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
                 Actions\Action::make('markets')
                     ->label('Markets')
@@ -128,7 +128,7 @@ class EventResource extends \Filament\Resources\Resource
                     ->icon('heroicon-o-document-text')
                     ->url(fn (Event $record): string => ResultResource::getUrl('index', ['tableFilters' => ['event_id' => $record->id]])),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

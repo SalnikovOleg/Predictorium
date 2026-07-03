@@ -91,11 +91,11 @@ class RoleResource extends \Filament\Resources\Resource
                         'api' => 'API',
                     ]),
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
                 Actions\DeleteAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -111,8 +111,6 @@ class RoleResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListRoles::route('/'),
-            'create' => Pages\CreateRole::route('/create'),
-            'edit' => Pages\EditRole::route('/{record}/edit'),
         ];
     }
 }

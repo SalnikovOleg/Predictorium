@@ -49,7 +49,7 @@ class TournamentConfigResource extends \Filament\Resources\Resource
                             ->multiple()
                             ->searchable()
                             ->preload(),
-                    ])->columns(2),
+                    ]),
             ]);
     }
 
@@ -77,10 +77,10 @@ class TournamentConfigResource extends \Filament\Resources\Resource
             ->filters([
                 //
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),

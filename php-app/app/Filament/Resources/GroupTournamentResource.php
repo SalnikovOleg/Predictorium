@@ -79,10 +79,10 @@ class GroupTournamentResource extends \Filament\Resources\Resource
             ])
             ->filters([
             ])
-            ->actions([
+            ->recordActions([
                 Actions\EditAction::make(),
             ])
-            ->bulkActions([
+            ->toolbarActions([
                 Actions\BulkActionGroup::make([
                     Actions\DeleteBulkAction::make(),
                 ]),
@@ -98,8 +98,6 @@ class GroupTournamentResource extends \Filament\Resources\Resource
     {
         return [
             'index' => Pages\ListGroupTournaments::route('/'),
-            'create' => Pages\CreateGroupTournament::route('/create'),
-            'edit' => Pages\EditGroupTournament::route('/{record}/edit'),
         ];
     }
 }
