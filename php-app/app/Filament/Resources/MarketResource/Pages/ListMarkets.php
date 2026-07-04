@@ -6,6 +6,7 @@ use App\Filament\Resources\MarketResource;
 use App\Models\Event;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Table;
 
 class ListMarkets extends ListRecords
 {
@@ -25,6 +26,17 @@ class ListMarkets extends ListRecords
         return 'Markets';
     }
 
+    public function table(Table $table): Table
+    {
+        return MarketResource::table($table)
+            ->modifyQueryUsing(function ($query) {
+                $eventId = request()->query('tableFilters')['event_id'] ?? null;
+                if ($eventId) {
+                    $query->where('event_id', $eventId);
+                }
+            });
+    }
+
     protected function getHeaderActions(): array
     {
         return [
@@ -33,17 +45,5 @@ class ListMarkets extends ListRecords
                     'event_id' => request()->query('tableFilters')['event_id'] ?? null
                 ])),
         ];
-    }
-
-    public function getTableQuery(): \Illuminate\Database\Eloquent\Builder
-    {
-        $query = parent::getTableQuery();
-
-        $eventId = request()->query('tableFilters')['event_id'] ?? null;
-        if ($eventId) {
-            $query->where('event_id', $eventId);
-        }
-
-        return $query;
     }
 }

@@ -6,6 +6,7 @@ use App\Filament\Resources\ResultResource;
 use App\Models\Event;
 use Filament\Actions;
 use Filament\Resources\Pages\ListRecords;
+use Filament\Tables\Table;
 
 class ListResults extends ListRecords
 {
@@ -27,16 +28,15 @@ class ListResults extends ListRecords
         return $this->cachedEventId;
     }
 
-    public function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    public function table(Table $table): Table
     {
-        $query = parent::getTableQuery();
-
-        $eventId = $this->getCachedEventId();
-        if ($eventId) {
-            $query->where('event_id', $eventId);
-        }
-
-        return $query;
+        return ResultResource::table($table)
+            ->modifyQueryUsing(function ($query) {
+                $eventId = $this->getCachedEventId();
+                if ($eventId) {
+                    $query->where('event_id', $eventId);
+                }
+            });
     }
 
     public function getHeading(): string
@@ -60,11 +60,9 @@ class ListResults extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->schema(fn () => ResultResource::getModalForm())
-                ->mountUsing(function ($form) use ($eventId) {
-                    $form->fill([
-                        'event_id' => $eventId,
-                    ]);
-                }),
+                ->data([
+                    'event_id' => $eventId,
+                ]),
         ];
     }
 }
