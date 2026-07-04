@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\OutcomeResult;
 use Illuminate\Database\Eloquent\Model;
 
 class Outcome extends Model
@@ -11,11 +12,13 @@ class Outcome extends Model
         'outcome_type_id',
         'participant_id',
         'coef',
+        'result',
     ];
 
     protected function casts(): array
     {
         return [
+            'result' => OutcomeResult::class,
             'coef' => 'decimal:2',
         ];
     }

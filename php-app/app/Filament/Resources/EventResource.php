@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\EventStatus;
 use App\Filament\Resources\EventResource\Pages;
 use App\Filament\Resources\MarketResource;
 use App\Filament\Resources\ResultResource;
@@ -48,13 +49,8 @@ class EventResource extends \Filament\Resources\Resource
                             ->searchable()
                             ->preload(),
                         Forms\Components\Select::make('status')
-                            ->options([
-                                'draft' => 'Draft',
-                                'active' => 'Active',
-                                'finished' => 'Finished',
-                                'archived' => 'Archived',
-                            ])
-                            ->default('draft')
+                            ->options(EventStatus::class)
+                            ->default(EventStatus::Draft)
                             ->required(),
                         Forms\Components\DateTimePicker::make('start_date'),
                         Forms\Components\DateTimePicker::make('end_date'),
@@ -77,6 +73,8 @@ class EventResource extends \Filament\Resources\Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('tournament.name')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
@@ -84,14 +82,11 @@ class EventResource extends \Filament\Resources\Resource
                     ->searchable()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('tournament.name')
+                Tables\Columns\TextColumn::make('start_date')
+                    ->dateTime()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
-                Tables\Columns\TextColumn::make('start_date')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('end_date')
                     ->dateTime()
                     ->sortable()
@@ -107,12 +102,7 @@ class EventResource extends \Filament\Resources\Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'active' => 'Active',
-                        'finished' => 'Finished',
-                        'archived' => 'Archived',
-                    ]),
+                    ->options(EventStatus::class),
                 Tables\Filters\SelectFilter::make('tournament_id')
                     ->relationship('tournament', 'name')
                     ->label('Tournament'),

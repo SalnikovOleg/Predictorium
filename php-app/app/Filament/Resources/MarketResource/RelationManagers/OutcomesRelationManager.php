@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\MarketResource\RelationManagers;
 
+use App\Enums\OutcomeResult;
 use App\Models\Outcome;
 use Filament\Actions;
 use Filament\Forms;
@@ -42,11 +43,7 @@ class OutcomesRelationManager extends RelationManager
 
                 Forms\Components\Select::make('result')
                     ->label('Result')
-                    ->options([
-                        'win' => 'Win',
-                        'lose' => 'Lose',
-                        'return' => 'Return',
-                    ])
+                    ->options(OutcomeResult::class)
                     ->nullable(),
             ]);
     }
@@ -74,12 +71,6 @@ class OutcomesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('result')
                     ->label('Result')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'win' => 'success',
-                        'lose' => 'danger',
-                        'return' => 'warning',
-                        default => 'gray',
-                    })
                     ->placeholder('—'),
             ])
             ->filters([

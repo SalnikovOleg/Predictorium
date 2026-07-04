@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TournamentStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Tournament extends Model
@@ -20,6 +21,7 @@ class Tournament extends Model
     protected function casts(): array
     {
         return [
+            'status' => TournamentStatus::class,
             'start_date' => 'datetime',
             'end_date' => 'datetime',
         ];

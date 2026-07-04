@@ -8,7 +8,6 @@ use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
-use Filament\Schemas\Components\Section;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -32,34 +31,33 @@ class ResultResource extends \Filament\Resources\Resource
     public static function form(Schema $schema): Schema
     {
         return $schema
-            ->schema([
-                Section::make()
-                    ->schema([
-                        Forms\Components\Select::make('event_id')
-                            ->relationship('event', 'name')
-                            ->required()
-                            ->searchable()
-                            ->preload(),
-                        Forms\Components\Select::make('result_type_id')
-                            ->relationship('resultType', 'name')
-                            ->required()
-                            ->searchable()
-                            ->preload(),
-                        Forms\Components\Select::make('participant_id')
-                            ->relationship('participant', 'name')
-                            ->searchable()
-                            ->preload()
-                            ->nullable(),
-                        Forms\Components\TextInput::make('time')
-                            ->numeric()
-                            ->nullable()
-                            ->label('Time (seconds)'),
-                        Forms\Components\Textarea::make('value')
-                            ->rows(3)
-                            ->nullable()
-                            ->json(),
-                    ])->columns(2),
-            ]);
+            ->schema(self::getModalForm());
+    }
+
+    public static function getModalForm(?Result $record = null): array
+    {
+        return [
+            Forms\Components\Hidden::make('event_id')
+                ->default(fn () => request()->query('event_id')),
+            Forms\Components\Select::make('result_type_id')
+                ->relationship('resultType', 'name')
+                ->required()
+                ->searchable()
+                ->preload(),
+            Forms\Components\Select::make('participant_id')
+                ->relationship('participant', 'name')
+                ->searchable()
+                ->preload()
+                ->nullable(),
+            Forms\Components\TextInput::make('time')
+                ->numeric()
+                ->nullable()
+                ->label('Time (seconds)'),
+            Forms\Components\Textarea::make('value')
+                ->rows(3)
+                ->nullable()
+                ->json(),
+        ];
     }
 
     public static function table(Table $table): Table
@@ -68,20 +66,12 @@ class ResultResource extends \Filament\Resources\Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('event.name')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('resultType.name')
-                    ->label('Result Type')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('participant.name')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('time')
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->label('Result Type'),
+                Tables\Columns\TextColumn::make('participant.name'),
+                Tables\Columns\TextColumn::make('time'),
                 Tables\Columns\TextColumn::make('value')
-                    ->limit(50)
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->limit(50),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -92,15 +82,13 @@ class ResultResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                Tables\Filters\SelectFilter::make('event_id')
-                    ->relationship('event', 'name')
-                    ->label('Event'),
                 Tables\Filters\SelectFilter::make('result_type_id')
                     ->relationship('resultType', 'name')
                     ->label('Result Type'),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
+                Actions\EditAction::make()
+                    ->schema(fn (Result $record): array => self::getModalForm($record)),
             ])
             ->toolbarActions([
                 Actions\BulkActionGroup::make([
