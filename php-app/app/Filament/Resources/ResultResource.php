@@ -4,10 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Filament\Resources\ResultResource\Pages;
 use App\Models\Result;
+use App\Models\ResultType;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
+use Filament\Schemas\Components\Utilities\Get;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -38,25 +40,102 @@ class ResultResource extends \Filament\Resources\Resource
     {
         return [
             Forms\Components\Hidden::make('event_id')
-                ->default(fn () => request()->query('event_id')),
+                ->reactive(),
+
             Forms\Components\Select::make('result_type_id')
+                ->label('Result Type')
                 ->relationship('resultType', 'name')
                 ->required()
                 ->searchable()
-                ->preload(),
+                ->preload()
+                ->reactive()
+                ->disabled(fn (?Result $record) => $record !== null)
+                ->afterStateUpdated(fn ($set) => [
+                    $set('participant_id', null),
+                    $set('value', null),
+                ]),
+
+            // Single participant (for value_type = 'participant')
             Forms\Components\Select::make('participant_id')
-                ->relationship('participant', 'name')
+                ->label('Participant')
+                ->options(function (Get $get) {
+                    $resultTypeId = $get('result_type_id');
+                    if (! $resultTypeId) {
+                        return [];
+                    }
+                    $resultType = ResultType::find($resultTypeId);
+                    if (! $resultType || $resultType->value_type !== 'participant') {
+                        return [];
+                    }
+                    $eventId = $get('event_id');
+
+                    if (! $eventId) {
+                        return [];
+                    }
+
+                    return \App\Models\Event::find($eventId)
+                        ?->participants()
+                        ->pluck('participants.name', 'participants.id')
+                        ->toArray() ?? [];
+                })
                 ->searchable()
                 ->preload()
-                ->nullable(),
+                ->nullable()
+                ->visible(function (Get $get) {
+                    $resultTypeId = $get('result_type_id');
+                    if (! $resultTypeId) {
+                        return false;
+                    }
+                    $resultType = ResultType::find($resultTypeId);
+
+                    return $resultType && $resultType->value_type === 'participant';
+                }),
+
+            // Repeater for positions (for value_type = 'positions')
+            Forms\Components\Repeater::make('value')
+                ->label('Positions')
+                ->schema([
+                    Forms\Components\TextInput::make('place')
+                        ->label('Place')
+                        ->numeric()
+                        ->required()
+                        ->minValue(1)
+                        ->maxValue(999),
+                    Forms\Components\Select::make('participant_id')
+                        ->label('Participant')
+                        ->options(function (Get $get) {
+                            $eventId = $get('../../event_id');
+                            if (! $eventId) {
+                                return [];
+                            }
+
+                            return \App\Models\Event::find($eventId)
+                                ?->participants()
+                                ->pluck('participants.name', 'participants.id')
+                                ->toArray() ?? [];
+                        })
+                        ->searchable()
+                        ->preload()
+                        ->required(),
+                ])
+                ->columns(2)
+                ->defaultItems(1)
+                ->addable()
+                ->deletable()
+                ->visible(function (Get $get) {
+                    $resultTypeId = $get('result_type_id');
+                    if (! $resultTypeId) {
+                        return false;
+                    }
+                    $resultType = ResultType::find($resultTypeId);
+
+                    return $resultType && $resultType->value_type === 'positions';
+                }),
+
             Forms\Components\TextInput::make('time')
                 ->numeric()
                 ->nullable()
                 ->label('Time (seconds)'),
-            Forms\Components\Textarea::make('value')
-                ->rows(3)
-                ->nullable()
-                ->json(),
         ];
     }
 

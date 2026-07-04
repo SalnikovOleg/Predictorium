@@ -11,9 +11,37 @@ class ListResults extends ListRecords
 {
     protected static string $resource = ResultResource::class;
 
+    public ?int $cachedEventId = null;
+
+    public function getCachedEventId(): ?int
+    {
+        if ($this->cachedEventId !== null) {
+            return $this->cachedEventId;
+        }
+
+        $eventId = request()->query('tableFilters')['event_id'] ?? null;
+        if ($eventId) {
+            $this->cachedEventId = (int) $eventId;
+        }
+
+        return $this->cachedEventId;
+    }
+
+    public function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getTableQuery();
+
+        $eventId = $this->getCachedEventId();
+        if ($eventId) {
+            $query->where('event_id', $eventId);
+        }
+
+        return $query;
+    }
+
     public function getHeading(): string
     {
-        $eventId = request()->query('tableFilters')['event_id'] ?? null;
+        $eventId = $this->getCachedEventId();
 
         if ($eventId) {
             $event = Event::find($eventId);
@@ -27,9 +55,14 @@ class ListResults extends ListRecords
 
     protected function getHeaderActions(): array
     {
+        $eventId = $this->getCachedEventId();
+
         return [
             Actions\CreateAction::make()
-                ->form(fn () => ResultResource::getModalForm()),
+                ->schema(fn () => ResultResource::getModalForm())
+                ->data([
+                    'event_id' => $eventId,
+                ]),
         ];
     }
 }
