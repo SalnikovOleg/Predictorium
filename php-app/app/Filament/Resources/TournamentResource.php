@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TournamentStatus;
 use App\Filament\Resources\TournamentResource\Pages;
 use App\Models\Category;
 use App\Models\Tournament;
@@ -54,13 +55,8 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->preload()
                             ->label('Tournament Config'),
                         Forms\Components\Select::make('status')
-                            ->options([
-                                'draft' => 'Draft',
-                                'active' => 'Active',
-                                'finished' => 'Finished',
-                                'archived' => 'Archived',
-                            ])
-                            ->default('draft')
+                            ->options(TournamentStatus::class)
+                            ->default(TournamentStatus::Draft)
                             ->required(),
                         Forms\Components\DateTimePicker::make('start_date'),
                         Forms\Components\DateTimePicker::make('end_date'),
@@ -76,14 +72,15 @@ class TournamentResource extends \Filament\Resources\Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('category.name')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->sortable(),
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('config.name')
                     ->label('Config')
                     ->sortable(),
@@ -91,8 +88,7 @@ class TournamentResource extends \Filament\Resources\Resource
                     ->badge(),
                 Tables\Columns\TextColumn::make('start_date')
                     ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
                     ->dateTime()
                     ->sortable()
@@ -108,12 +104,7 @@ class TournamentResource extends \Filament\Resources\Resource
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('status')
-                    ->options([
-                        'draft' => 'Draft',
-                        'active' => 'Active',
-                        'finished' => 'Finished',
-                        'archived' => 'Archived',
-                    ]),
+                    ->options(TournamentStatus::class),
                 Tables\Filters\SelectFilter::make('category_id')
                     ->relationship('category', 'name')
                     ->label('Category'),

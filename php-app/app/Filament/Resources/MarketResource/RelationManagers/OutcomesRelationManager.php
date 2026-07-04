@@ -2,6 +2,8 @@
 
 namespace App\Filament\Resources\MarketResource\RelationManagers;
 
+use App\Enums\OutcomeResult;
+use App\Models\Outcome;
 use Filament\Actions;
 use Filament\Forms;
 use Filament\Schemas\Schema;
@@ -22,12 +24,14 @@ class OutcomesRelationManager extends RelationManager
                     ->relationship('outcomeType', 'name')
                     ->searchable()
                     ->preload()
+                    ->disabled(fn (?Outcome $record) => $record !== null)
                     ->required(),
 
                 Forms\Components\Select::make('participant_id')
                     ->label('Participant')
                     ->relationship('participant', 'name')
                     ->searchable()
+                    ->disabled(fn (?Outcome $record) => $record !== null)
                     ->preload(),
 
                 Forms\Components\TextInput::make('coef')
@@ -39,11 +43,7 @@ class OutcomesRelationManager extends RelationManager
 
                 Forms\Components\Select::make('result')
                     ->label('Result')
-                    ->options([
-                        'win' => 'Win',
-                        'lose' => 'Lose',
-                        'return' => 'Return',
-                    ])
+                    ->options(OutcomeResult::class)
                     ->nullable(),
             ]);
     }
@@ -71,12 +71,6 @@ class OutcomesRelationManager extends RelationManager
                 Tables\Columns\TextColumn::make('result')
                     ->label('Result')
                     ->badge()
-                    ->color(fn (string $state): string => match ($state) {
-                        'win' => 'success',
-                        'lose' => 'danger',
-                        'return' => 'warning',
-                        default => 'gray',
-                    })
                     ->placeholder('—'),
             ])
             ->filters([
@@ -85,9 +79,9 @@ class OutcomesRelationManager extends RelationManager
             ->headerActions([
                 Actions\CreateAction::make(),
             ])
-            ->actions([
-                Actions\EditAction::make(),
-                Actions\DeleteAction::make(),
+            ->recordActions([
+                Actions\EditAction::make()->label(''),
+                Actions\DeleteAction::make()->label(''),
             ])
             ->toolbarActions([
                 Actions\BulkActionGroup::make([

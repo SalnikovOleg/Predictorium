@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\EventStatus;
 use Illuminate\Database\Eloquent\Model;
 
 class Event extends Model
@@ -18,6 +19,7 @@ class Event extends Model
     protected function casts(): array
     {
         return [
+            'status' => EventStatus::class,
             'start_date' => 'datetime',
             'end_date' => 'datetime',
         ];

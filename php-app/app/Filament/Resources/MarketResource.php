@@ -45,26 +45,12 @@ class MarketResource extends \Filament\Resources\Resource
                         Forms\Components\Select::make('market_template_id')
                             ->label('Market Template')
                             ->options(function (Get $get) {
-                                $eventId = $get('event_id') ?? request()->query('event_id');
-                                if (! $eventId) {
-                                    return [];
-                                }
-
-                                $event = Event::with('tournament.config')->find($eventId);
-                                if (! $event || ! $event->tournament || ! $event->tournament->config) {
-                                    return [];
-                                }
-
-                                $templateIds = $event->tournament->config->market_template_ids ?? [];
-
-                                return MarketTemplate::whereIn('id', $templateIds)
-                                    ->get()
-                                    ->mapWithKeys(fn (MarketTemplate $t) => [
-                                        $t->id => $t->name,
-                                    ]);
+                                return self::TemplateOptions($get);
                             })
                             ->searchable()
                             ->preload()
+                            ->disabled(fn (?Market $record) => $record !== null)
+                            ->dehydrated()
                             ->reactive()
                             ->afterStateUpdated(function ($set, $state) {
                                 $template = MarketTemplate::with('marketType')->find($state);
@@ -89,8 +75,7 @@ class MarketResource extends \Filament\Resources\Resource
 
                         Forms\Components\TextInput::make('description')
                             ->label('Description')
-                            ->maxLength(255)
-                            ->readOnly(),
+                            ->maxLength(255),
 
                         Forms\Components\Select::make('participant_id')
                             ->label('Participant')
@@ -105,6 +90,7 @@ class MarketResource extends \Filament\Resources\Resource
                             })
                             ->searchable()
                             ->preload()
+                            ->disabled(fn (?Market $record) => $record !== null)
                             ->visible(fn (Get $get) => (int) $get('market_type_id') === 2)
                             ->afterStateUpdated(function ($set, $get, $state) {
                                 $template = MarketTemplate::find($get('market_template_id'));
@@ -128,6 +114,7 @@ class MarketResource extends \Filament\Resources\Resource
                             ->multiple()
                             ->searchable()
                             ->preload()
+                            ->disabled(fn (?Market $record) => $record !== null)
                             ->visible(fn (Get $get) => (int) $get('market_type_id') === 3),
 
                         Forms\Components\Select::make('participant_a_id')
@@ -143,6 +130,7 @@ class MarketResource extends \Filament\Resources\Resource
                             })
                             ->searchable()
                             ->preload()
+                            ->disabled(fn (?Market $record) => $record !== null)
                             ->visible(fn (Get $get) => (int) $get('market_type_id') === 4),
 
                         Forms\Components\Select::make('participant_b_id')
@@ -158,6 +146,7 @@ class MarketResource extends \Filament\Resources\Resource
                             })
                             ->searchable()
                             ->preload()
+                            ->disabled(fn (?Market $record) => $record !== null)
                             ->visible(fn (Get $get) => (int) $get('market_type_id') === 4),
 
                         Forms\Components\Hidden::make('param1'),
@@ -222,5 +211,27 @@ class MarketResource extends \Filament\Resources\Resource
     {
         return parent::getEloquentQuery()
             ->with(['marketTemplate', 'marketTemplate.marketType', 'outcomes']);
+    }
+
+    private static function TemplateOptions(Get $get): \Illuminate\Support\Collection | array
+    {
+        $eventId = $get('event_id') ?? request()->query('event_id');
+        if (! $eventId) {
+            return [];
+        }
+
+        $event = Event::with('tournament.config')->find($eventId);
+        if (! $event || ! $event->tournament || ! $event->tournament->config) {
+            return [];
+        }
+
+        $templateIds = $event->tournament->config->market_template_ids ?? [];
+
+        return MarketTemplate::whereIn('id', $templateIds)
+            ->with('marketType')
+            ->get()
+            ->mapWithKeys(fn (MarketTemplate $t) => [
+                $t->id => $t->name . ' ( ' . $t->marketType->name . ' )',
+            ]);
     }
 }
