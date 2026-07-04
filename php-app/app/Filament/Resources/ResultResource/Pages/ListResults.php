@@ -60,9 +60,11 @@ class ListResults extends ListRecords
         return [
             Actions\CreateAction::make()
                 ->schema(fn () => ResultResource::getModalForm())
-                ->data([
-                    'event_id' => $eventId,
-                ]),
+                ->mountUsing(function ($form) use ($eventId) {
+                    $form->fill([
+                        'event_id' => $eventId,
+                    ]);
+                }),
         ];
     }
 }

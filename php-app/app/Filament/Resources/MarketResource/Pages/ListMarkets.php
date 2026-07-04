@@ -34,4 +34,16 @@ class ListMarkets extends ListRecords
                 ])),
         ];
     }
+
+    public function getTableQuery(): \Illuminate\Database\Eloquent\Builder
+    {
+        $query = parent::getTableQuery();
+
+        $eventId = request()->query('tableFilters')['event_id'] ?? null;
+        if ($eventId) {
+            $query->where('event_id', $eventId);
+        }
+
+        return $query;
+    }
 }

@@ -40,6 +40,7 @@ class ResultResource extends \Filament\Resources\Resource
     {
         return [
             Forms\Components\Hidden::make('event_id')
+                ->default(fn () => request()->query('tableFilters')['event_id'] ?? null)
                 ->reactive(),
 
             Forms\Components\Select::make('result_type_id')
@@ -68,7 +69,6 @@ class ResultResource extends \Filament\Resources\Resource
                         return [];
                     }
                     $eventId = $get('event_id');
-
                     if (! $eventId) {
                         return [];
                     }
@@ -150,7 +150,7 @@ class ResultResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('participant.name'),
                 Tables\Columns\TextColumn::make('time'),
                 Tables\Columns\TextColumn::make('value')
-                    ->limit(50),
+                    ->limit(10),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
