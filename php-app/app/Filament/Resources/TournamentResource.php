@@ -58,8 +58,10 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->options(TournamentStatus::class)
                             ->default(TournamentStatus::Draft)
                             ->required(),
-                        Forms\Components\DateTimePicker::make('start_date'),
-                        Forms\Components\DateTimePicker::make('end_date'),
+                        Forms\Components\DateTimePicker::make('start_date')
+                            ->format('Y-m-d H:i'),
+                        Forms\Components\DateTimePicker::make('end_date')
+                            ->format('Y-m-d H:i'),
                         Forms\Components\Textarea::make('description')
                             ->rows(2),
                     ])->columns(2),
@@ -87,18 +89,18 @@ class TournamentResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextColumn::make('start_date')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('end_date')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])

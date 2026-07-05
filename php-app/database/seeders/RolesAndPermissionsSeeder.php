@@ -48,5 +48,7 @@ class RolesAndPermissionsSeeder extends Seeder
         $user->givePermissionTo([
             'access_admin',
         ]);
+
+        Role::create(['name' => 'customer', 'guard_name' => 'web', 'description' => 'Customer registered via API']);
     }
 }

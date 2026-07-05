@@ -172,7 +172,7 @@ class MarketResource extends \Filament\Resources\Resource
                     ->label('Outcomes')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
