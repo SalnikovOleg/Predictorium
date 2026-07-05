@@ -48,7 +48,8 @@ class GroupMemberResource extends \Filament\Resources\Resource
                             ->required()
                             ->searchable()
                             ->preload(),
-                        Forms\Components\DateTimePicker::make('joined_at'),
+                        Forms\Components\DateTimePicker::make('joined_at')
+                            ->format('Y-m-d H:i'),
                     ])->columns(2),
             ]);
     }
@@ -66,14 +67,14 @@ class GroupMemberResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('rank.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('joined_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('Y-m-d H:i')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
