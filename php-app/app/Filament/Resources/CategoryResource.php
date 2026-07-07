@@ -48,6 +48,24 @@ class CategoryResource extends \Filament\Resources\Resource
                             ->numeric()
                             ->default(0),
                     ]),
+//                Section::make('Content')
+//                    ->schema([
+//                        Forms\Components\Repeater::make('pages')
+//                            ->schema([
+//                                Forms\Components\Select::make('lang')
+//                                    ->options(Language::class)
+//                                    ->required(),
+//                                Forms\Components\TextInput::make('title')
+//                                    ->required()
+//                                    ->maxLength(255),
+//                                Forms\Components\RichEditor::make('content')
+//                                    ->required(),
+//                            ])
+//                            ->default([
+//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
+//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
+//                            ]),
+//                    ]),
             ]);
     }
 
@@ -92,13 +110,17 @@ class CategoryResource extends \Filament\Resources\Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\ContentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array
     {
         return [
             'index' => Pages\ListCategories::route('/'),
+            'create' => Pages\CreateCategory::route('/create'),
+            'edit' => Pages\EditCategory::route('/{record}/edit'),
         ];
     }
 }

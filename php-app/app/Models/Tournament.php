@@ -41,4 +41,9 @@ class Tournament extends Model
     {
         return $this->hasMany(Event::class);
     }
+
+    public function contents()
+    {
+        return $this->morphMany(ContentPage::class, 'model');
+    }
 }

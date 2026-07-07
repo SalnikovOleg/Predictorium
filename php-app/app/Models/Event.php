@@ -44,4 +44,9 @@ class Event extends Model
     {
         return $this->hasMany(Market::class);
     }
+
+    public function contents()
+    {
+        return $this->morphMany(ContentPage::class, 'model');
+    }
 }

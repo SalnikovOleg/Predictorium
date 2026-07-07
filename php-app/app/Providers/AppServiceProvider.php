@@ -11,7 +11,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        $this->app->bind(\App\Repositories\Web\SimplePageRepository::class, function ($app) {
+            return new \App\Repositories\Web\SimplePageRepository(new \App\Models\SimplePage());
+        });
     }
 
     /**

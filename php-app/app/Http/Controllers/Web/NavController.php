@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers\WebStructure;
+namespace App\Http\Controllers\Web;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\WebStructure\NavigationResource;
-use App\Services\WebStructure\NavigationService;
+use App\Http\Resources\Web\NavigationResource;
+use App\Services\Web\NavigationService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;

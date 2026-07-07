@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Trading;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Trading\TournamentResource;
+use App\Http\Resources\Trading\TournamentShowResource;
 use App\Services\Trading\TournamentService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class TournamentController extends Controller
 {
@@ -15,18 +14,19 @@ class TournamentController extends Controller
         protected TournamentService $service,
     ) {}
 
-    public function __invoke(Request $request, int $categoryId): AnonymousResourceCollection|JsonResponse
+    public function show(Request $request, int $tournamentId): TournamentShowResource|JsonResponse
     {
-        $tournaments = $this->service->getTournamentsByCategoryId($categoryId);
+        $tournament = $this->service->getById($tournamentId);
 
-        if ($tournaments->isEmpty()) {
+        if (!$tournament) {
             return response()->json([
                 'status' => false,
-                'message' => 'No tournaments found for this category',
+                'message' => 'Tournament not found',
             ], 404);
         }
 
-        return TournamentResource::collection($tournaments)
+        return (new TournamentShowResource($tournament))
             ->additional(['status' => true]);
     }
+
 }

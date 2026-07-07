@@ -11,7 +11,7 @@ class TournamentRepository
         protected Tournament $model,
     ) {}
 
-    public function getByCategorySlug(string $slug): Collection
+    public function getByCategorySlug(string $slug, string $locale): Collection
     {
         return $this->model
             ->with('category')
@@ -20,12 +20,40 @@ class TournamentRepository
             ->get();
     }
 
-    public function getByCategoryId(int $categoryId): Collection
+    public function getByCategoryId(int $categoryId, string $locale): Collection
     {
         return $this->model
-            ->with('category')
+            ->with(['category' => function ($query) use ($locale) {
+                $query->with(['contents' => function ($subQuery) use ($locale) {
+                    $subQuery->where('lang', $locale);
+                }]);
+            }])
             ->where('status', 'active')
             ->where('category_id', $categoryId)
             ->get();
+    }
+
+    public function getBySlug(string $slug, string $locale): ?Tournament
+    {
+        return $this->model
+            ->with([
+                'category',
+                'contents' => fn ($q) => $q->where('lang', $locale),
+                'events' => fn ($q) => $q->where('status', 'active'),
+            ])
+            ->where('slug', $slug)
+            ->first();
+    }
+
+    public function getById(int $id, string $locale): ?Tournament
+    {
+        return $this->model
+            ->with([
+                'category',
+                'contents' => fn ($q) => $q->where('lang', $locale),
+                'events' => fn ($q) => $q->where('status', 'active'),
+            ])
+            ->where('id', $id)
+            ->first();
     }
 }
