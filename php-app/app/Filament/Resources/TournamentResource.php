@@ -4,14 +4,12 @@ namespace App\Filament\Resources;
 
 use App\Enums\TournamentStatus;
 use App\Filament\Resources\TournamentResource\Pages;
-use App\Models\Category;
 use App\Models\Tournament;
-use App\Models\TournamentConfig;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
-use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Schema;
 use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
@@ -65,6 +63,25 @@ class TournamentResource extends \Filament\Resources\Resource
                         Forms\Components\Textarea::make('description')
                             ->rows(2),
                     ])->columns(2),
+//                Section::make('Content')
+//                    ->schema([
+//                        Forms\Components\Repeater::make('pages')
+//                            ->schema([
+//                                Forms\Components\Select::make('lang')
+//                                    ->options(Language::class)
+//                                    ->required(),
+//                                Forms\Components\TextInput::make('title')
+//                                    ->required()
+//                                    ->maxLength(255),
+//                                Forms\Components\RichEditor::make('content')
+//                                    ->required(),
+//                            ])
+//                            ->default([
+//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
+//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
+//                            ])
+//                            ->columns(1),
+//                    ]),
             ]);
     }
 
@@ -123,7 +140,9 @@ class TournamentResource extends \Filament\Resources\Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\ContentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

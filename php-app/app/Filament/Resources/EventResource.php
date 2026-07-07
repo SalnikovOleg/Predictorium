@@ -4,8 +4,6 @@ namespace App\Filament\Resources;
 
 use App\Enums\EventStatus;
 use App\Filament\Resources\EventResource\Pages;
-use App\Filament\Resources\MarketResource;
-use App\Filament\Resources\ResultResource;
 use App\Models\Event;
 use BackedEnum;
 use Filament\Actions;
@@ -66,6 +64,25 @@ class EventResource extends \Filament\Resources\Resource
                             ->preload()
                             ->label('Event Participants'),
                     ]),
+//                Section::make('Content')
+//                    ->schema([
+//                        Forms\Components\Repeater::make('pages')
+//                            ->schema([
+//                                Forms\Components\Select::make('lang')
+//                                    ->options(Language::class)
+//                                    ->required(),
+//                                Forms\Components\TextInput::make('title')
+//                                    ->required()
+//                                    ->maxLength(255),
+//                                Forms\Components\RichEditor::make('content')
+//                                    ->required(),
+//                            ])
+//                            ->default([
+//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
+//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
+//                            ])
+//                            ->columns(1),
+//                    ]),
             ]);
     }
 
@@ -129,7 +146,9 @@ class EventResource extends \Filament\Resources\Resource
 
     public static function getRelations(): array
     {
-        return [];
+        return [
+            RelationManagers\ContentsRelationManager::class,
+        ];
     }
 
     public static function getPages(): array

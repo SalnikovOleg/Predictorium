@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\WebStructure;
+namespace Tests\Feature\Web;
 
 use VanOns\FilamentNavigation\Models\Navigation;
 use Illuminate\Foundation\Testing\RefreshDatabase;

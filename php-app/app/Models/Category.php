@@ -36,4 +36,9 @@ class Category extends Model
     {
         return $this->hasMany(ResultType::class);
     }
+
+    public function contents()
+    {
+        return $this->morphMany(ContentPage::class, 'model');
+    }
 }

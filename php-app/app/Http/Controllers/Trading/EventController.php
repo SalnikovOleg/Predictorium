@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Trading;
 
 use App\Http\Controllers\Controller;
-use App\Http\Resources\Trading\EventResource;
+use App\Http\Resources\Trading\EventShowResource;
 use App\Services\Trading\EventService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\Resources\Json\AnonymousResourceCollection;
 
 class EventController extends Controller
 {
@@ -15,18 +14,18 @@ class EventController extends Controller
         protected EventService $service,
     ) {}
 
-    public function __invoke(Request $request, int $tournamentId): AnonymousResourceCollection|JsonResponse
+    public function show(Request $request, int $tournamentId): EventShowResource|JsonResponse
     {
-        $events = $this->service->getActiveEventsByTournamentId($tournamentId);
+        $event = $this->service->getById($tournamentId);
 
-        if ($events->isEmpty()) {
+        if (!$event) {
             return response()->json([
                 'status' => false,
-                'message' => 'No active events found for this tournament',
+                'message' => 'Event not found',
             ], 404);
         }
 
-        return EventResource::collection($events)
+        return (new EventShowResource($event))
             ->additional(['status' => true]);
     }
 }

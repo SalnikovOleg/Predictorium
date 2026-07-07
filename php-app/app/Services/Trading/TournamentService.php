@@ -2,6 +2,7 @@
 
 namespace App\Services\Trading;
 
+use App\Models\Tournament;
 use App\Repositories\Trading\TournamentRepository;
 use Illuminate\Support\Collection;
 
@@ -11,8 +12,16 @@ class TournamentService
         protected TournamentRepository $repository,
     ) {}
 
-    public function getTournamentsByCategoryId(int $categoryId): Collection
+    public function getTournamentsByCategorySlug(string $slug): Collection
     {
-        return $this->repository->getByCategoryId($categoryId);
+        $locale = app()->getLocale();
+        return $this->repository->getByCategorySlug($slug, $locale);
+    }
+
+    public function getById(int $tournamentId): ?Tournament
+    {
+        $locale = app()->getLocale();
+
+        return $this->repository->getById($tournamentId, $locale);
     }
 }

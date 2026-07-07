@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Services\WebStructure;
+namespace App\Services\Web;
 
 use VanOns\FilamentNavigation\Models\Navigation;
 

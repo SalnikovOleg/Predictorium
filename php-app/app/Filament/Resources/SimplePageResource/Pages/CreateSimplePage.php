@@ -1,0 +1,11 @@
+<?php
+
+namespace App\Filament\Resources\SimplePageResource\Pages;
+
+use App\Filament\Resources\SimplePageResource;
+use Filament\Resources\Pages\CreateRecord;
+
+class CreateSimplePage extends CreateRecord
+{
+    protected static string $resource = SimplePageResource::class;
+}
