@@ -20,10 +20,7 @@ class CategoryController extends Controller
         $category = $this->service->getBySlug($slug);
 
         if (!$category) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Category not found',
-            ], 404);
+            return $this->notFoundReponse();
         }
 
         return (new CategoryResource($category))

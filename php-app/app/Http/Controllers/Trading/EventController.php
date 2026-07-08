@@ -19,10 +19,7 @@ class EventController extends Controller
         $event = $this->service->getById($tournamentId);
 
         if (!$event) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Event not found',
-            ], 404);
+            return $this->notFoundReponse();
         }
 
         return (new EventShowResource($event))

@@ -19,10 +19,7 @@ class TournamentController extends Controller
         $tournament = $this->service->getById($tournamentId);
 
         if (!$tournament) {
-            return response()->json([
-                'status' => false,
-                'message' => 'Tournament not found',
-            ], 404);
+            return $this->notFoundReponse();
         }
 
         return (new TournamentShowResource($tournament))

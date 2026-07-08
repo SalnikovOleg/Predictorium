@@ -29,7 +29,6 @@ services:
     container_name: predictum-frontend
     volumes:
       - ./react-app:/app
-      - /app/node_modules
     ports:
       - "3000:3000"
     networks:

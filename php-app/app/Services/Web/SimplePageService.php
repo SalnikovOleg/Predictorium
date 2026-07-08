@@ -11,13 +11,15 @@ class SimplePageService
         protected SimplePageRepository $repository
     ) {}
 
-    public function getPageBySlug(string $slug): SimplePage
+    public function getPageBySlug(string $slug): ?SimplePage
     {
-        return $this->repository->findBySlug($slug);
+        $locale = app()->getLocale();
+        return $this->repository->findBySlug($slug, $locale);
     }
 
-    public function getActivePageBySlug(string $slug): SimplePage
+    public function getActivePageBySlug(string $slug): ?SimplePage
     {
-        return $this->repository->findActiveBySlug($slug);
+        $locale = app()->getLocale();
+        return $this->repository->findActiveBySlug($slug, $locale);
     }
 }

@@ -11,25 +11,20 @@ class SimplePageRepository
         protected SimplePage $model
     ) {}
 
-    public function findBySlug(string $slug): SimplePage
+    public function findBySlug(string $slug, string $locale): ?SimplePage
     {
-        $page = $this->model->where('slug', $slug)->with('contents')->first();
-
-        if (!$page) {
-            throw new ModelNotFoundException("SimplePage with slug '{$slug}' not found.");
-        }
-
-        return $page;
+        return $this->model->
+            with(['contents' => fn ($q) => $q->where('lang', $locale)])
+            ->where('slug', $slug)
+            ->first();
     }
 
-    public function findActiveBySlug(string $slug): SimplePage
+    public function findActiveBySlug(string $slug, string $locale): ?SimplePage
     {
-        $page = $this->model->where('slug', $slug)->where('is_active', true)->with('contents')->first();
-
-        if (!$page) {
-            throw new ModelNotFoundException("Active SimplePage with slug '{$slug}' not found.");
-        }
-
-        return $page;
+        return $this->model->
+            with(['contents' => fn ($q) => $q->where('lang', $locale)])
+            ->where('slug', $slug)
+            ->where('is_active', true)
+            ->first();
     }
 }
