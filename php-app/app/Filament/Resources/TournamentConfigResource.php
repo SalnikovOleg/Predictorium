@@ -22,7 +22,7 @@ class TournamentConfigResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 25;
 
     protected static ?string $modelLabel = 'Tournament Config';
 

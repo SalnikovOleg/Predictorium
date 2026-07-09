@@ -22,7 +22,7 @@ class ParticipantResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 30;
 
     protected static ?string $modelLabel = 'Participant';
 

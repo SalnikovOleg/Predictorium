@@ -21,7 +21,7 @@ class UserRankResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 54;
 
     protected static ?string $modelLabel = 'User Rank';
 

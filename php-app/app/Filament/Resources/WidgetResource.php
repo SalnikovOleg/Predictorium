@@ -2,8 +2,8 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GroupResource\Pages;
-use App\Models\Group;
+use App\Filament\Resources\WidgetResource\Pages;
+use App\Models\Widget;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -13,19 +13,19 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class GroupResource extends \Filament\Resources\Resource
+class WidgetResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = Group::class;
+    protected static ?string $model = Widget::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-user-group';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-square-3-stack-3d';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Customers';
+    protected static UnitEnum|string|null $navigationGroup = 'Layouts';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 11;
 
-    protected static ?string $modelLabel = 'Group';
+    protected static ?string $modelLabel = 'Widget';
 
-    protected static ?string $pluralModelLabel = 'Groups';
+    protected static ?string $pluralModelLabel = 'Widgets';
 
     public static function form(Schema $schema): Schema
     {
@@ -35,13 +35,13 @@ class GroupResource extends \Filament\Resources\Resource
                     ->schema([
                         Forms\Components\TextInput::make('name')
                             ->required()
-                            ->maxLength(255),
-                        Forms\Components\Select::make('owner_id')
-                            ->relationship('owner', 'name')
+                            ->maxLength(100),
+                        Forms\Components\TextInput::make('description')
                             ->required()
-                            ->searchable()
-                            ->preload(),
-                    ])->columns(2),
+                            ->maxLength(255),
+                        Forms\Components\KeyValue::make('params')
+                            ->label('Parameters'),
+                    ]),
             ]);
     }
 
@@ -54,10 +54,9 @@ class GroupResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('owner.name')
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('settings')
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('description')
+                    ->searchable()
+                    ->limit(50),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
@@ -68,6 +67,7 @@ class GroupResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                //
             ])
             ->recordActions([
                 Actions\EditAction::make(),
@@ -79,15 +79,12 @@ class GroupResource extends \Filament\Resources\Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGroups::route('/'),
+            'index' => Pages\ListWidgets::route('/'),
+            'create' => Pages\CreateWidget::route('/create'),
+            'edit' => Pages\EditWidget::route('/{record}/edit'),
         ];
     }
 }

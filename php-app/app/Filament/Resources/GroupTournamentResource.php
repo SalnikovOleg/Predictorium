@@ -21,7 +21,7 @@ class GroupTournamentResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 52;
 
     protected static ?string $modelLabel = 'Group Tournament';
 

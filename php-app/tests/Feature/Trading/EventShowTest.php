@@ -186,7 +186,7 @@ class EventShowTest extends TestCase
         $response->assertNotFound()
             ->assertJson([
                 'status' => false,
-                'message' => 'Event not found',
+                'message' => 'Page not found',
             ]);
     }
 }

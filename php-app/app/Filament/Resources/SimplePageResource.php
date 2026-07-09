@@ -20,9 +20,9 @@ class SimplePageResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-document-text';
 
-    //protected static UnitEnum|string|null $navigationGroup = 'Structure';
+    protected static UnitEnum|string|null $navigationGroup = 'Layouts';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 10;
 
     protected static ?string $modelLabel = 'Simple Page';
 
@@ -40,8 +40,8 @@ class SimplePageResource extends \Filament\Resources\Resource
                             ->maxLength(255),
                         Forms\Components\Toggle::make('is_active')
                             ->default(true),
-                        Forms\Components\KeyValue::make('params_json')
-                            ->label('Parameters'),
+//                        Forms\Components\KeyValue::make('params_json')
+//                            ->label('Parameters'),
                     ]),
             ]);
     }
@@ -89,6 +89,7 @@ class SimplePageResource extends \Filament\Resources\Resource
     {
         return [
             RelationManagers\ContentsRelationManager::class,
+            RelationManagers\WidgetsPageRelationManager::class,
         ];
     }
 

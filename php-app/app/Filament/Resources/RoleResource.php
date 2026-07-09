@@ -21,7 +21,7 @@ class RoleResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Access Control';
 
-    protected static ?int $navigationSort = 1;
+    protected static ?int $navigationSort = 51;
 
     protected static ?string $modelLabel = 'Role';
 

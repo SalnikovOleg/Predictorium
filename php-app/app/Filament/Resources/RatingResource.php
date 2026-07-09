@@ -21,7 +21,7 @@ class RatingResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 7;
+    protected static ?int $navigationSort = 55;
 
     protected static ?string $modelLabel = 'Rating';
 

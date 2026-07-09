@@ -147,7 +147,7 @@ class TournamentShowTest extends TestCase
         $response->assertNotFound()
             ->assertJson([
                 'status' => false,
-                'message' => 'Tournament not found',
+                'message' => 'Page not found',
             ]);
     }
 }

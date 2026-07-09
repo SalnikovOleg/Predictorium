@@ -21,7 +21,7 @@ class OutcomeTypeResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 3;
+    protected static ?int $navigationSort = 22;
 
     protected static ?string $modelLabel = 'Outcome Template';
 

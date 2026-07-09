@@ -28,4 +28,9 @@ class SimplePage extends Model
     {
         return $this->morphMany(ContentPage::class, 'model');
     }
+
+    public function widgets(): MorphMany
+    {
+        return $this->morphMany(WidgetsPage::class, 'model');
+    }
 }

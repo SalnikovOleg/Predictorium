@@ -6,6 +6,6 @@ abstract class Controller
 {
     public function notFoundReponse()
     {
-        return response()->json(['status' => 'false', 'message' => 'Page not found'], 404);
+        return response()->json(['status' => false, 'message' => 'Page not found'], 404);
     }
 }

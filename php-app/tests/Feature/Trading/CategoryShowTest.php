@@ -114,7 +114,7 @@ class CategoryShowTest extends TestCase
         $response->assertNotFound()
             ->assertJson([
                 'status' => false,
-                'message' => 'Category not found',
+                'message' => 'Page not found',
             ]);
     }
 }

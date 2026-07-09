@@ -2,8 +2,9 @@
 
 namespace App\Filament\Resources;
 
-use App\Filament\Resources\GroupResource\Pages;
-use App\Models\Group;
+use App\Filament\Resources\WidgetsPageResource\Pages;
+use App\Models\Widget;
+use App\Models\WidgetsPage;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -13,19 +14,20 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use UnitEnum;
 
-class GroupResource extends \Filament\Resources\Resource
+class WidgetsPageResource extends \Filament\Resources\Resource
 {
-    protected static ?string $model = Group::class;
+    protected static ?string $model = WidgetsPage::class;
 
-    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-user-group';
+    protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-window';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Customers';
+    protected static UnitEnum|string|null $navigationGroup = 'Layouts';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 12;
 
-    protected static ?string $modelLabel = 'Group';
+    protected static ?string $modelLabel = 'Structure';
 
-    protected static ?string $pluralModelLabel = 'Groups';
+    protected static ?string $pluralModelLabel = 'Widgets Pages';
+    protected static bool $shouldRegisterNavigation = false;
 
     public static function form(Schema $schema): Schema
     {
@@ -33,15 +35,20 @@ class GroupResource extends \Filament\Resources\Resource
             ->schema([
                 Section::make()
                     ->schema([
-                        Forms\Components\TextInput::make('name')
-                            ->required()
-                            ->maxLength(255),
-                        Forms\Components\Select::make('owner_id')
-                            ->relationship('owner', 'name')
+                        Forms\Components\Select::make('widget_id')
+                            ->relationship('widget', 'name')
                             ->required()
                             ->searchable()
                             ->preload(),
-                    ])->columns(2),
+                        Forms\Components\TextInput::make('model_type')
+                            ->required()
+                            ->maxLength(255),
+                        Forms\Components\TextInput::make('model_id')
+                            ->required()
+                            ->numeric(),
+                        Forms\Components\KeyValue::make('params')
+                            ->label('Parameters'),
+                    ]),
             ]);
     }
 
@@ -51,13 +58,14 @@ class GroupResource extends \Filament\Resources\Resource
             ->columns([
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('widget.name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('owner.name')
+                Tables\Columns\TextColumn::make('model_type')
+                    ->searchable()
+                    ->limit(30),
+                Tables\Columns\TextColumn::make('model_id')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('settings')
-                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
@@ -68,6 +76,7 @@ class GroupResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+                //
             ])
             ->recordActions([
                 Actions\EditAction::make(),
@@ -79,15 +88,12 @@ class GroupResource extends \Filament\Resources\Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [];
-    }
-
     public static function getPages(): array
     {
         return [
-            'index' => Pages\ListGroups::route('/'),
+            'index' => Pages\ListWidgetsPages::route('/'),
+            'create' => Pages\CreateWidgetsPage::route('/create'),
+            'edit' => Pages\EditWidgetsPage::route('/{record}/edit'),
         ];
     }
 }

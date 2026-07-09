@@ -21,7 +21,7 @@ class CategoryResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 0;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $modelLabel = 'Category';
 

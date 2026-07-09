@@ -21,7 +21,7 @@ class StakeResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 6;
+    protected static ?int $navigationSort = 50;
 
     protected static ?string $modelLabel = 'Stake';
 

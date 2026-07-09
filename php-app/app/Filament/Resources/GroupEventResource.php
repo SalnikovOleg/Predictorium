@@ -21,7 +21,7 @@ class GroupEventResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 5;
+    protected static ?int $navigationSort = 53;
 
     protected static ?string $modelLabel = 'Group Event';
 

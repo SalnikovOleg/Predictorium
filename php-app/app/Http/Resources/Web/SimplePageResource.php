@@ -25,7 +25,11 @@ class SimplePageResource extends JsonResource
                         'lang' => $c->lang,
                         'title' => $c->title,
                         'content' => $c->content,
-                ])
+                ]),
+                'widgets' => $this->widgets->map(fn ($w) => [
+                    'widget' => $w->widget->name ?? null,
+                    'params' => $w->params,
+                ]),
             ],
         ];
     }

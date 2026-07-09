@@ -21,7 +21,7 @@ class MarketTypeResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 2;
+    protected static ?int $navigationSort = 21;
 
     protected static ?string $modelLabel = 'Market Type';
 

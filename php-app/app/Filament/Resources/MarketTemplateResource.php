@@ -23,7 +23,7 @@ class MarketTemplateResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 24;
 
     protected static ?string $modelLabel = 'Market Template';
 

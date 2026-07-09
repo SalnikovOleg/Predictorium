@@ -12,10 +12,10 @@ function App() {
       <Routes>
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
-          <Route path="/what-to-play" element={<WhatToPlayPage />} />
-          <Route path="/categories/:slug" element={<CategoryPage />} />
-          <Route path="/tournaments/:tournamentId" element={<TournamentPage />} />
-          <Route path="/events/:eventId" element={<EventPage />} />
+          <Route path="/what-to-play/" element={<WhatToPlayPage />} />
+          <Route path="/categories/:slug/" element={<CategoryPage />} />
+          <Route path="/tournaments/:tournamentId/" element={<TournamentPage />} />
+          <Route path="/events/:eventId/" element={<EventPage />} />
         </Route>
       </Routes>
     </BrowserRouter>
