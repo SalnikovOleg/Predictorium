@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\TaxonomyType;
 use App\Filament\Resources\CategoryResource\Pages;
 use App\Models\Category;
 use BackedEnum;
@@ -40,6 +41,9 @@ class CategoryResource extends \Filament\Resources\Resource
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
+                        Forms\Components\Select::make('taxonomy_type')
+                            ->options(TaxonomyType::class)
+                            ->required(),
                         Forms\Components\TextInput::make('icon')
                             ->maxLength(255),
                         Forms\Components\Toggle::make('is_active')
@@ -81,6 +85,8 @@ class CategoryResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('slug')
                     ->searchable()
                     ->sortable(),
+                Tables\Columns\TextColumn::make('taxonomy_type')
+                    ->badge(),
                 Tables\Columns\TextColumn::make('icon'),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
@@ -96,7 +102,8 @@ class CategoryResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                //
+                Tables\Filters\SelectFilter::make('taxonomy_type')
+                    ->options(TaxonomyType::class),
             ])
             ->recordActions([
                 Actions\EditAction::make(),

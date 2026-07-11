@@ -8,19 +8,17 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('participants', function (Blueprint $table) {
+        Schema::create('taxonomies', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('category_id');
+            $table->enum('type', ['community', 'country']);
             $table->string('name');
-            $table->foreignId('taxonomy_id');
-            $table->string('icon')->nullable();
+            $table->string('icon');
             $table->timestamps();
-            $table->softDeletes();
         });
     }
 
     public function down(): void
     {
-        Schema::dropIfExists('participants');
+        Schema::dropIfExists('taxonomies');
     }
 };

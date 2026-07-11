@@ -8,11 +8,17 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Participant extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'category_id',
         'name',
+        'taxonomy_id'
     ];
+
+    public function taxonomy()
+    {
+        return $this->belongsTo(Taxonomy::class);
+    }
 
     public function category()
     {

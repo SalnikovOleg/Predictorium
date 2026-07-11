@@ -14,6 +14,7 @@ return new class extends Migration
             $table->string('name');
             $table->string('slug');
             $table->text('description')->nullable();
+            $table->string('icon')->nullable();
             $table->foreignId('config_id');
             $table->enum('status', ['draft', 'active', 'finished', 'archived'])->default('draft');
             $table->dateTime('start_date')->nullable();

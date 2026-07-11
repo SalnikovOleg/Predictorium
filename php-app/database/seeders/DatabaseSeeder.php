@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
            OutcomeTypeSeeder::class,
            MarketTemplateSeeder::class,
            ResultTypeSeeder::class,
+           TaxonomySeeder::class,
         ]);
 
         $admin = User::firstOrCreate(

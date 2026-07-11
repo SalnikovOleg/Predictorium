@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaxonomyType;
 use Illuminate\Database\Eloquent\Model;
 
 class Category extends Model
@@ -9,6 +10,7 @@ class Category extends Model
     protected $fillable = [
         'name',
         'slug',
+        'taxonomy_type',
         'is_active',
         'sort_order',
         'icon',
@@ -17,6 +19,7 @@ class Category extends Model
     protected function casts(): array
     {
         return [
+            'taxonomy_type' => TaxonomyType::class,
             'is_active' => 'boolean',
             'sort_order' => 'integer',
         ];

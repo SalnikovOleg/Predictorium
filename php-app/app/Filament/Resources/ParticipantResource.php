@@ -5,6 +5,7 @@ namespace App\Filament\Resources;
 use App\Filament\Resources\ParticipantResource\Pages;
 use App\Models\Category;
 use App\Models\Participant;
+use App\Models\Taxonomy;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -22,7 +23,7 @@ class ParticipantResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Trading';
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 31;
 
     protected static ?string $modelLabel = 'Participant';
 
@@ -41,8 +42,23 @@ class ParticipantResource extends \Filament\Resources\Resource
                             ->relationship('category', 'name')
                             ->required()
                             ->searchable()
+                            ->preload()
+                            ->live(),
+                        Forms\Components\Select::make('taxonomy_id')
+                            ->label('Community/Country')
+                            ->options(function ($get) {
+                                $categoryId = $get('category_id');
+                                $taxonomyType = Category::find($categoryId)?->taxonomy_type;
+                                if (! $taxonomyType) {
+                                    return Taxonomy::pluck('name', 'id');
+                                }
+                                return Taxonomy::where('type', $taxonomyType)
+                                    ->pluck('name', 'id');
+                            })
+                            ->searchable()
+                            ->required()
                             ->preload(),
-                    ])->columns(2),
+                    ]),
             ]);
     }
 
@@ -57,6 +73,8 @@ class ParticipantResource extends \Filament\Resources\Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('category.name')
                     ->sortable(),
+                Tables\Columns\TextColumn::make('taxonomy.name')->label('Community/Country')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
@@ -70,6 +88,9 @@ class ParticipantResource extends \Filament\Resources\Resource
                 Tables\Filters\SelectFilter::make('category_id')
                     ->relationship('category', 'name')
                     ->label('Category'),
+                Tables\Filters\SelectFilter::make('taxonomy_id')
+                    ->relationship('taxonomy', 'name')
+                    ->label('Taxonomy'),
             ])
             ->recordActions([
                 Actions\EditAction::make(),
