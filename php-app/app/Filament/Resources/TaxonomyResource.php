@@ -20,9 +20,9 @@ class TaxonomyResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-folder';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Trading';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading Config';
 
-    protected static ?int $navigationSort = 30;
+    protected static ?int $navigationSort = 20;
 
     protected static ?string $modelLabel = 'Taxonomy';
 
