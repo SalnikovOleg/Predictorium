@@ -18,6 +18,7 @@ class NavigationResource extends JsonResource
             return [
                 'label'    => $item['label'] ?? null,
                 'url'      => $item['data']['url'] ?? null,
+                'icon'     => $item['data']['icon'] ?? null,
                 'children' => $item['children'] ?? [],
             ];
         })->values();
