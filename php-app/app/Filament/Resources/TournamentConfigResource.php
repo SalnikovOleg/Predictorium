@@ -78,12 +78,7 @@ class TournamentConfigResource extends \Filament\Resources\Resource
                 //
             ])
             ->recordActions([
-                Actions\EditAction::make(),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+                Actions\EditAction::make()->label(''),
             ]);
     }
 

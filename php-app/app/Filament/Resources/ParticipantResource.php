@@ -38,6 +38,12 @@ class ParticipantResource extends \Filament\Resources\Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\FileUpload::make('icon')
+                            ->image()
+                            ->disk('public')
+                            ->directory('participants/icons')
+                            ->imageEditor()
+                            ->columnSpanFull(),
                         Forms\Components\Select::make('category_id')
                             ->relationship('category', 'name')
                             ->required()
@@ -71,9 +77,9 @@ class ParticipantResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->sortable(),
-                Tables\Columns\TextColumn::make('category.name')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('taxonomy.name')->label('Community/Country')
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('category.name')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
@@ -93,12 +99,7 @@ class ParticipantResource extends \Filament\Resources\Resource
                     ->label('Taxonomy'),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+                Actions\EditAction::make()->label(''),
             ]);
     }
 

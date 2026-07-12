@@ -65,16 +65,9 @@ class TaxonomyResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-//                Tables\Filters\SelectFilter::make('type')
-//                    ->options(TaxonomyType::class),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+                Actions\EditAction::make()->label(''),
             ]);
     }
 

@@ -14,6 +14,7 @@ class Event extends Model
         'status',
         'start_date',
         'end_date',
+        'ext_id'
     ];
 
     protected function casts(): array

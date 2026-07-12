@@ -76,7 +76,7 @@ class MarketTemplateResource extends \Filament\Resources\Resource
                 //
             ])
             ->recordActions([
-                Actions\EditAction::make(),
+                Actions\EditAction::make()->label(''),
             ])
             ->toolbarActions([
             ]);

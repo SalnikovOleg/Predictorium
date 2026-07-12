@@ -11,6 +11,7 @@ use Filament\Forms;
 use Filament\Schemas\Schema;
 use Filament\Schemas\Components\Section;
 use Filament\Tables;
+use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -45,44 +46,38 @@ class EventResource extends \Filament\Resources\Resource
                             ->relationship('tournament', 'name')
                             ->required()
                             ->searchable()
-                            ->preload(),
-                        Forms\Components\Select::make('status')
-                            ->options(EventStatus::class)
-                            ->default(EventStatus::Draft)
-                            ->required(),
-                        Forms\Components\DateTimePicker::make('start_date')
-                            ->format('Y-m-d H:i'),
-                        Forms\Components\DateTimePicker::make('end_date')
-                            ->format('Y-m-d H:i'),
-                    ])->columns(2),
+                            ->preload()
+                            ->reactive()
+                            ->afterStateUpdated(fn ($state, $set) => $set('participants', [])),
+                        Section::make()
+                            ->schema([
+                                Forms\Components\DateTimePicker::make('start_date')
+                                    ->format('Y-m-d H:i'),
+                                Forms\Components\DateTimePicker::make('end_date')
+                                    ->format('Y-m-d H:i'),
+                                Forms\Components\Select::make('status')
+                                    ->options(EventStatus::class)
+                                    ->default(EventStatus::Draft)
+                                    ->required(),
+                                Forms\Components\TextInput::make('ext_id')
+                                    ->label('External ID')
+                                    ->maxLength(50),
+                            ])->columns(2)
+                    ]),
                 Section::make('Participants')
                     ->schema([
                         Forms\Components\Select::make('participants')
                             ->relationship('participants', 'name')
+                            ->label('Event Participants')
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->label('Event Participants'),
-                    ]),
-//                Section::make('Content')
-//                    ->schema([
-//                        Forms\Components\Repeater::make('pages')
-//                            ->schema([
-//                                Forms\Components\Select::make('lang')
-//                                    ->options(Language::class)
-//                                    ->required(),
-//                                Forms\Components\TextInput::make('title')
-//                                    ->required()
-//                                    ->maxLength(255),
-//                                Forms\Components\RichEditor::make('content')
-//                                    ->required(),
-//                            ])
-//                            ->default([
-//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
-//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
-//                            ])
-//                            ->columns(1),
-//                    ]),
+                            ->options(fn ($get) => \App\Models\Participant::query()
+                                ->with('taxonomy')
+                                ->where('taxonomy_id', \App\Models\Tournament::find($get('tournament_id'))?->taxonomy_id)
+                                ->get()
+                                ->mapWithKeys(fn ($p) => [$p->id => "{$p->name} ({$p->taxonomy->name})"])),
+                    ])
             ]);
     }
 
@@ -93,6 +88,7 @@ class EventResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('tournament.name')
+                    ->wrap()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
@@ -103,11 +99,13 @@ class EventResource extends \Filament\Resources\Resource
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('start_date')
                     ->dateTime('Y-m-d H:i')
+                    ->wrap()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('status')
                     ->badge(),
                 Tables\Columns\TextColumn::make('end_date')
                     ->dateTime('Y-m-d H:i')
+                    ->wrap()
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('created_at')
@@ -127,7 +125,7 @@ class EventResource extends \Filament\Resources\Resource
                     ->label('Tournament'),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
+                //Actions\EditAction::make(),
                 Actions\Action::make('markets')
                     ->label('Markets')
                     ->icon('heroicon-o-banknotes')
@@ -136,11 +134,6 @@ class EventResource extends \Filament\Resources\Resource
                     ->label('Results')
                     ->icon('heroicon-o-document-text')
                     ->url(fn (Event $record): string => ResultResource::getUrl('index', ['tableFilters' => ['event_id' => $record->id]])),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
             ]);
     }
 

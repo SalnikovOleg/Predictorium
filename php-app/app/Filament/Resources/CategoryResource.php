@@ -44,32 +44,18 @@ class CategoryResource extends \Filament\Resources\Resource
                         Forms\Components\Select::make('taxonomy_type')
                             ->options(TaxonomyType::class)
                             ->required(),
-                        Forms\Components\TextInput::make('icon')
-                            ->maxLength(255),
+                        Forms\Components\FileUpload::make('icon')
+                            ->image()
+                            ->disk('public')
+                            ->directory('categories/icons')
+                            ->imageEditor()
+                            ->columnSpanFull(),
                         Forms\Components\Toggle::make('is_active')
                             ->default(true),
                         Forms\Components\TextInput::make('sort_order')
                             ->numeric()
                             ->default(0),
                     ]),
-//                Section::make('Content')
-//                    ->schema([
-//                        Forms\Components\Repeater::make('pages')
-//                            ->schema([
-//                                Forms\Components\Select::make('lang')
-//                                    ->options(Language::class)
-//                                    ->required(),
-//                                Forms\Components\TextInput::make('title')
-//                                    ->required()
-//                                    ->maxLength(255),
-//                                Forms\Components\RichEditor::make('content')
-//                                    ->required(),
-//                            ])
-//                            ->default([
-//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
-//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
-//                            ]),
-//                    ]),
             ]);
     }
 
@@ -87,11 +73,8 @@ class CategoryResource extends \Filament\Resources\Resource
                     ->sortable(),
                 Tables\Columns\TextColumn::make('taxonomy_type')
                     ->badge(),
-                Tables\Columns\TextColumn::make('icon'),
                 Tables\Columns\IconColumn::make('is_active')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('sort_order')
-                    ->sortable(),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime('Y-m-d H:i')
                     ->sortable()
@@ -106,12 +89,7 @@ class CategoryResource extends \Filament\Resources\Resource
                     ->options(TaxonomyType::class),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+                Actions\EditAction::make()->label(''),
             ]);
     }
 

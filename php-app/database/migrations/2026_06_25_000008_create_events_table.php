@@ -16,6 +16,7 @@ return new class extends Migration
             $table->enum('status', ['draft', 'active', 'finished', 'archived'])->default('draft');
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
+            $table->string('ext_id')->nullable();
             $table->timestamps();
         });
     }

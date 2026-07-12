@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TaxonomyType;
 use App\Enums\TournamentStatus;
 use Illuminate\Database\Eloquent\Model;
 
@@ -9,6 +10,7 @@ class Tournament extends Model
 {
     protected $fillable = [
         'category_id',
+        'taxonomy_id',
         'name',
         'slug',
         'description',
@@ -16,11 +18,15 @@ class Tournament extends Model
         'status',
         'start_date',
         'end_date',
+        'ext_id',
+        'icon',
+        'params',
     ];
 
     protected function casts(): array
     {
         return [
+            'params' => 'array',
             'status' => TournamentStatus::class,
             'start_date' => 'datetime',
             'end_date' => 'datetime',
@@ -30,6 +36,11 @@ class Tournament extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
+    }
+
+    public function taxonomy()
+    {
+        return $this->belongsTo(Taxonomy::class);
     }
 
     public function config()

@@ -11,6 +11,7 @@ class Participant extends Model
 
     protected $fillable = [
         'category_id',
+        'icon',
         'name',
         'taxonomy_id'
     ];

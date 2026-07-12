@@ -14,6 +14,7 @@ class TournamentShowResource extends JsonResource
             'name' => $this->name,
             'slug' => $this->slug,
             'description' => $this->description,
+            'icon' => $this->icon,
             'status' => $this->status->value,
             'start_date' => $this->start_date?->format('Y-m-d H:i'),
             'end_date' => $this->end_date?->format('Y-m-d H:i'),

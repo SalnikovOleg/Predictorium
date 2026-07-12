@@ -41,8 +41,34 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->required()
                             ->unique(ignoreRecord: true)
                             ->maxLength(255),
+                        Forms\Components\FileUpload::make('icon')
+                            ->image()
+                            ->disk('public')
+                            ->directory('tournaments/icons')
+                            ->imageEditor()
+                            ->columnSpanFull(),
+                        Forms\Components\Textarea::make('description')
+                            ->rows(2)
+                            ->columnSpanFull(),
+                        Forms\Components\KeyValue::make('params')
+                            ->label('Params')
+                            ->reorderable(),
+                    ]),
+                Section::make()
+                    ->schema([
                         Forms\Components\Select::make('category_id')
                             ->relationship('category', 'name')
+                            ->required()
+                            ->searchable()
+                            ->preload()
+                            ->reactive()
+                            ->afterStateUpdated(fn ($state, $set) => $set('taxonomy_id', null)),
+                        Forms\Components\Select::make('taxonomy_id')
+                            ->label('Community/country')
+                            ->relationship('taxonomy', 'name')
+                            ->options(fn ($get) => \App\Models\Taxonomy::query()
+                                ->where('type', \App\Models\Category::find($get('category_id'))?->taxonomy_type)
+                                ->pluck('name', 'id'))
                             ->required()
                             ->searchable()
                             ->preload(),
@@ -60,28 +86,10 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->format('Y-m-d H:i'),
                         Forms\Components\DateTimePicker::make('end_date')
                             ->format('Y-m-d H:i'),
-                        Forms\Components\Textarea::make('description')
-                            ->rows(2),
+                        Forms\Components\TextInput::make('ext_id')
+                            ->label('External ID')
+                            ->maxLength(255),
                     ])->columns(2),
-//                Section::make('Content')
-//                    ->schema([
-//                        Forms\Components\Repeater::make('pages')
-//                            ->schema([
-//                                Forms\Components\Select::make('lang')
-//                                    ->options(Language::class)
-//                                    ->required(),
-//                                Forms\Components\TextInput::make('title')
-//                                    ->required()
-//                                    ->maxLength(255),
-//                                Forms\Components\RichEditor::make('content')
-//                                    ->required(),
-//                            ])
-//                            ->default([
-//                                ['lang' => Language::En->value, 'title' => '', 'content' => ''],
-//                                ['lang' => Language::Uk->value, 'title' => '', 'content' => ''],
-//                            ])
-//                            ->columns(1),
-//                    ]),
             ]);
     }
 
@@ -129,12 +137,7 @@ class TournamentResource extends \Filament\Resources\Resource
                     ->label('Category'),
             ])
             ->recordActions([
-                Actions\EditAction::make(),
-            ])
-            ->toolbarActions([
-                Actions\BulkActionGroup::make([
-                    Actions\DeleteBulkAction::make(),
-                ]),
+                Actions\EditAction::make()->label(''),
             ]);
     }
 
