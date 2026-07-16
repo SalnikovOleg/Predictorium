@@ -3,12 +3,6 @@ export interface ApiResponse<T> {
   data: T
 }
 
-export interface MenuItem {
-  label: string
-  url: string
-  children: MenuItem[]
-}
-
 export interface PageContent {
   id: number
   model_type: string
