@@ -47,7 +47,7 @@ src/
 
 ## Axios Client
 
-Create a centralized Axios instance in `src/shared/api/client.ts`:
+Create a centralized Axios instance in `src/lib/api/client.ts`:
 
 ```ts
 import axios from 'axios'

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\TaxonomyType;
 use App\Enums\TournamentStatus;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Tournament extends Model
 {
@@ -56,5 +57,10 @@ class Tournament extends Model
     public function contents()
     {
         return $this->morphMany(ContentPage::class, 'model');
+    }
+
+    public function getIconUrlAttribute()
+    {
+        return $this->icon ? Storage::disk(config('filesystems.default'))->url($this->icon) : null;
     }
 }

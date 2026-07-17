@@ -1,6 +1,6 @@
 import { useHome } from '../../features/home'
-import { LoadingSpinner } from '../../shared/ui/LoadingSpinner'
-import { ErrorMessage } from '../../shared/ui/ErrorMessage'
+import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
+import { ErrorMessage } from '@/components/ui/ErrorMessage'
 
 export function HomePage() {
   const { data, isLoading, error } = useHome()

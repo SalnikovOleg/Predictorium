@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { useMainMenu } from '../hooks/useMainMenu'
 import { useAppStore } from '../../../app/store'
-import { ErrorMessage } from '../../../shared/ui/ErrorMessage'
+import { ErrorMessage } from '@/components/ui/ErrorMessage'
 
 function MenuIcon() {
   return (

@@ -25,42 +25,6 @@ export interface SimplePage {
   contents: PageContent[]
 }
 
-export interface Category {
-  id: number
-  name: string
-  slug: string
-  is_active: boolean
-  sort_order: number
-  icon: string
-  contents: Array<{
-    id: number
-    title: string
-    content: string
-    lang: string
-  }>
-  tournaments: TournamentSummary[]
-}
-
-export interface TournamentSummary {
-  id: number
-  name: string
-  slug: string
-  description: string | null
-  status: string
-  start_date: string
-  end_date: string | null
-}
-
-export interface Tournament extends TournamentSummary {
-  category: {
-    id: number
-    name: string
-    slug: string
-  }
-  contents: PageContent[]
-  events: EventSummary[]
-}
-
 export interface EventSummary {
   id: number
   name: string

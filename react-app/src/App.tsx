@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { Layout } from './shared/ui/Layout'
+import { Layout } from '@/components/ui/Layout'
 import { HomePage } from './pages/Home/HomePage'
 import { CategoryPage } from './pages/Category/CategoryPage'
 import { TournamentPage } from './pages/Tournament/TournamentPage'

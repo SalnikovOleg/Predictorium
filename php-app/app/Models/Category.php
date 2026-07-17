@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\TaxonomyType;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 
 class Category extends Model
 {
@@ -43,5 +44,10 @@ class Category extends Model
     public function contents()
     {
         return $this->morphMany(ContentPage::class, 'model');
+    }
+
+    public function getIconUrlAttribute()
+    {
+        return $this->icon ? Storage::disk(config('filesystems.default'))->url($this->icon) : null;
     }
 }
