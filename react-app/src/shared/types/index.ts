@@ -48,13 +48,16 @@ export interface Outcome {
   id: number
   coef: string
   result: string | null
-  outcome_type: OutcomeType
-  participant: Participant | null
+  outcome_type_id: number
+  name: string
 }
 
 export interface Market {
   id: number
+  name: string
   description: string
+  market_type_id: number
+  param1: number
   outcomes: Outcome[]
 }
 

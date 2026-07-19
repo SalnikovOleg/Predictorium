@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router'
-import { Layout } from '@/components/ui/Layout'
+import { Layout } from '@/pages/Layout'
 import { HomePage } from './pages/Home/HomePage'
 import { CategoryPage } from './pages/Category/CategoryPage'
 import { TournamentPage } from './pages/Tournament/TournamentPage'
@@ -12,8 +12,8 @@ function App() {
         <Route element={<Layout />}>
           <Route path="/" element={<HomePage />} />
           <Route path="/categories/:slug/" element={<CategoryPage />} />
-          <Route path="/tournaments/:tournamentId/" element={<TournamentPage />} />
-          <Route path="/events/:eventId/" element={<EventPage />} />
+          <Route path="/tournaments/:slug/" element={<TournamentPage />} />
+          <Route path="/events/:slug/" element={<EventPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

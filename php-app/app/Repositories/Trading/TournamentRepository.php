@@ -39,7 +39,7 @@ class TournamentRepository
             ->with([
                 'category',
                 'contents' => fn ($q) => $q->where('lang', $locale),
-                'events' => fn ($q) => $q->where('status', 'active'),
+                'events',
             ])
             ->where('slug', $slug)
             ->first();
@@ -51,7 +51,7 @@ class TournamentRepository
             ->with([
                 'category',
                 'contents' => fn ($q) => $q->where('lang', $locale),
-                'events' => fn ($q) => $q->where('status', 'active'),
+                'events',
             ])
             ->where('id', $id)
             ->first();

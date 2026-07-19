@@ -23,4 +23,11 @@ class EventService
 
         return $this->repository->getById($eventId, $locale);
     }
+
+    public function getBySlug(string $slug): ?Event
+    {
+        $locale = app()->getLocale();
+
+        return $this->repository->getBySlug($slug, $locale);
+    }
 }

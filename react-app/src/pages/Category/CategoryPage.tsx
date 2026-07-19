@@ -1,8 +1,8 @@
 import { useParams } from 'react-router'
 import { useCategory } from '@/features/category'
 import { TournamentCard } from '@/features/tournament'
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { H1, H2, H3, LoadingSpinner, ErrorMessage, TournamentHr } from '@/components/ui/common'
+import { CategoryAsideBlock } from '@/components/ui/blocks'
 
 export function CategoryPage() {
   const { slug } = useParams<{ slug: string }>()
@@ -23,18 +23,23 @@ export function CategoryPage() {
   }
 
   const subtitle = category.contents[0]?.title
-
+  const content = category.contents[0]?.content
+  
   return (
-    <div className="space-y-4">
-      <h1 className="text-4xl font-bold">
-        {category.name}{subtitle ? `. ${subtitle}` : ''}
-      </h1>
-      <div className="grid gap-8 lg:grid-cols-[1fr_320px]">
+    <div className="space-y-6">
+      <H1>{category.name}</H1>
+
+      <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
         <div className="space-y-4">
+
+          {subtitle && <H2>{subtitle}</H2>}
+
+          <TournamentHr/>
+          
           {category.tournaments.length === 0 ? (
-            <p className="text-muted-foreground">No tournaments available.</p>
-          ) : (
-            <div className="space-y-6">
+            <H3>No tournaments available.</H3>
+            ) : (
+            <div className="space-y-4">
               {category.tournaments.map((tournament) => (
                 <TournamentCard key={tournament.id} tournament={tournament} />
               ))}
@@ -43,22 +48,16 @@ export function CategoryPage() {
         </div>
 
         {(category.icon || category.contents.length > 0) && (
-          <aside className="space-y-6">
-            {category.icon && (
+          <aside>
+            <CategoryAsideBlock
+                content={content}
+              >
               <img
                 src={category.icon}
                 alt={category.name}
-                className="w-full rounded-lg object-contain"
+                className="w-full rounded-2xl object-contain "
               />
-            )}
-            {category.contents.map((item) => (
-              <div key={item.title} className="space-y-2">
-                <div
-                  className="text-sm text-muted-foreground prose prose-sm dark:prose-invert max-w-none"
-                  dangerouslySetInnerHTML={{ __html: item.content }}
-                />
-              </div>
-            ))}
+            </CategoryAsideBlock> 
           </aside>
         )}
       </div>

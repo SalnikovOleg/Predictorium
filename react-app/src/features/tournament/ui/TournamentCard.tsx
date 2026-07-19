@@ -1,32 +1,39 @@
 import { Link } from 'react-router'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import type { TournamentSummary } from '../types'
+import { Card } from '@/components/ui/card'
+import { H3, Description } from '@/components/ui/common'
+import { PeriodLine } from '@/components/ui/date'
+import {TournamentIcon} from '@/components/ui/icons'
 
 export function TournamentCard({ tournament }: { tournament: TournamentSummary }) {
   return (
-    <Link to={`/tournaments/${tournament.id}/`} className="block">
-      <Card className="transition-colors hover:bg-muted/50">
-        <div className="flex items-stretch mx-4 gap-2">
-          {tournament.icon && (
-            <img
-              src={tournament.icon}
-              alt={tournament.name}
-              className="h-full w-32 shrink-0 rounded object-cover"
-            />
-          )}
-          <div className="flex-1 min-w-0">
-            <CardHeader>
-              <CardTitle>{tournament.name}</CardTitle>
-              <CardDescription>{tournament.description}</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <span className="text-sm text-muted-foreground">
-                {tournament.start_date} – {tournament.end_date}
-              </span>
-            </CardContent>
+     <Link to={`/tournaments/${tournament.slug}/`} className="block">
+      <Card className="flex items-center gap-4">
+        {tournament.icon ? (
+          <img
+            src={tournament.icon}
+            alt={tournament.name}
+            className="h-full w-44 shrink-0 rounded-lg object-cover ml-1"
+          />
+        ) : (
+          <div className="h-full w-44 shrink-0 rounded-lg bg-[--color-secondary] flex items-center justify-center text-[--color-accent] text-2xl">
+            &#x2655;
           </div>
+        )}
+
+        <div className="flex-1 space-y-4">
+          <H3>{tournament.name}</H3>
+
+          {tournament.description && (
+            <Description>{tournament.description}</Description>
+          )}
+
+          <PeriodLine start_date={tournament.start_date} end_date={tournament.end_date}/>
+
         </div>
-      </Card>
+
+        <TournamentIcon />
+      </Card>  
     </Link>
   )
 }

@@ -52,14 +52,6 @@ class MarketResource extends \Filament\Resources\Resource
                             ->disabled(fn (?Market $record) => $record !== null)
                             ->dehydrated()
                             ->reactive()
-                            ->afterStateUpdated(function ($set, $state) {
-                                $template = MarketTemplate::with('marketType')->find($state);
-                                if ($template) {
-                                    $set('market_type_id', $template->market_type_id);
-                                    $set('param1', $template->param1);
-                                    $set('description', $template->marketType->name);
-                                }
-                            })
                             ->afterStateHydrated(function ($set, $state) {
                                 if ($state) {
                                     $template = MarketTemplate::with('marketType')->find($state);
@@ -176,6 +168,8 @@ class MarketResource extends \Filament\Resources\Resource
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->reorderable('sort_order')
+            ->defaultSort('sort_order')
             ->filters([
 //                Tables\Filters\SelectFilter::make('event_id')
 //                    ->relationship('event', 'name')
@@ -210,7 +204,8 @@ class MarketResource extends \Filament\Resources\Resource
     public static function getEloquentQuery(): \Illuminate\Database\Eloquent\Builder
     {
         return parent::getEloquentQuery()
-            ->with(['marketTemplate', 'marketTemplate.marketType', 'outcomes']);
+            ->with(['marketTemplate', 'marketTemplate.marketType', 'outcomes'])
+            ->orderBy('sort_order');
     }
 
     private static function TemplateOptions(Get $get): \Illuminate\Support\Collection | array

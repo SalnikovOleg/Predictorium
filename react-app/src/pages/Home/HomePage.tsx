@@ -1,6 +1,5 @@
 import { useHome } from '../../features/home'
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
-import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { H1, ErrorMessage, LoadingSpinner } from '@/components/ui/common'
 
 export function HomePage() {
   const { data, isLoading, error } = useHome()
@@ -14,7 +13,7 @@ export function HomePage() {
     <div className="space-y-8">
       {contents.map((item) => (
         <article key={item.id} className="space-y-4">
-          <h1 className="text-4xl font-bold text-white">{item.title}</h1>
+          <H1>{item.title}</H1>
           <div
             className="prose prose-invert max-w-none text-gray-300"
             dangerouslySetInnerHTML={{ __html: item.content }}
@@ -22,7 +21,7 @@ export function HomePage() {
         </article>
       ))}
       {contents.length === 0 && (
-        <p className="text-gray-400">No content available.</p>
+        <p className="text-muted-foreground">No content available.</p>
       )}
     </div>
   )

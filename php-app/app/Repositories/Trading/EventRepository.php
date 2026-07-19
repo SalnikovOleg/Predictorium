@@ -28,8 +28,23 @@ class EventRepository
                 'contents' => fn ($q) => $q->where('lang', $locale),
                 'markets.outcomes.outcomeType',
                 'markets.outcomes.participant',
+                'markets.marketTemplate'
             ])
             ->where('id', $id)
+            ->first();
+    }
+
+    public function getBySlug(string $slug, string $locale): ?Event
+    {
+        return $this->model
+            ->with([
+                'tournament',
+                'contents' => fn ($q) => $q->where('lang', $locale),
+                'markets.outcomes.outcomeType',
+                'markets.outcomes.participant',
+                'markets.marketTemplate'
+            ])
+            ->where('slug', $slug)
             ->first();
     }
 }

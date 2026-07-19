@@ -10,6 +10,7 @@ class Market extends Model
         'event_id',
         'market_template_id',
         'description',
+        'sort_order',
     ];
 
     public function event()

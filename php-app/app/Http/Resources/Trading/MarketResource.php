@@ -11,7 +11,10 @@ class MarketResource extends JsonResource
     {
         return [
             'id' => $this->id,
-            'description' => $this->description,
+            'name' => $this->description ?? $this->marketTemplate->name,
+            'description' => $this->marketTemplate->description,
+            'market_type_id' => $this->whenLoaded('marketTemplate', fn() => $this->marketTemplate->market_type_id),
+            'param1'         => $this->whenLoaded('marketTemplate', fn() => $this->marketTemplate->param1),
             'outcomes' => OutcomeResource::collection($this->whenLoaded('outcomes')),
         ];
     }

@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('market_templates', function (Blueprint $table) {
             $table->id();
             $table->string('name');
+            $table->string('description')->nullable();
             $table->foreignId('category_id');
             $table->foreignId('market_type_id')->constrained();
             $table->json('outcome_type_ids')->nullable();

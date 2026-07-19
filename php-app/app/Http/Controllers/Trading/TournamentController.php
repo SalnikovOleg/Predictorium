@@ -14,9 +14,9 @@ class TournamentController extends Controller
         protected TournamentService $service,
     ) {}
 
-    public function show(Request $request, int $tournamentId): TournamentShowResource|JsonResponse
+    public function show(Request $request, string $slug): TournamentShowResource|JsonResponse
     {
-        $tournament = $this->service->getById($tournamentId);
+        $tournament = $this->service->getBySlug($slug);
 
         if (!$tournament) {
             return $this->notFoundReponse();

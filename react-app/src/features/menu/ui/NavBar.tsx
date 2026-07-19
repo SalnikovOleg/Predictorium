@@ -1,7 +1,7 @@
 import { Link } from 'react-router'
 import { useMainMenu } from '../hooks/useMainMenu'
 import { useAppStore } from '../../../app/store'
-import { ErrorMessage } from '@/components/ui/ErrorMessage'
+import { ErrorMessage } from '@/components/ui/common'
 
 function MenuIcon() {
   return (
@@ -29,11 +29,11 @@ export function NavBar() {
       <Link to="/" className="text-xl font-bold text-white">
         Predictorium
       </Link>
-    
+
       {/* Desktop nav */}
       <nav className="hidden md:block">
         {isLoading && (
-          <div className="h-6 w-32 animate-pulse rounded bg-gray-700" />
+          <div className="h-6 w-32 animate-pulse rounded bg-white/10" />
         )}
         {error && <ErrorMessage message="Failed to load menu" />}
         {data && (
@@ -42,7 +42,7 @@ export function NavBar() {
               <li key={item.url}>
                 <Link
                   to={item.url}
-                  className="text-gray-300 transition-colors hover:text-white"
+                  className="text-gray-300 transition-colors hover:text-[--color-accent]"
                 >
                   {item.icon} {item.label}
                 </Link>
@@ -66,9 +66,9 @@ export function NavBar() {
 
       {/* Mobile nav */}
       {sidebarOpen && (
-        <nav className="md:hidden border-t border-gray-800 px-4 pb-4">
+        <nav className="md:hidden border-t border-[--color-border] px-4 pb-4 bg-[#0a1e24]/80 backdrop-blur-sm">
           {isLoading && (
-            <div className="h-6 w-32 animate-pulse rounded bg-gray-700" />
+            <div className="h-6 w-32 animate-pulse rounded bg-white/10" />
           )}
           {error && <ErrorMessage message="Failed to load menu" />}
           {data && (
@@ -78,7 +78,7 @@ export function NavBar() {
                   <Link
                     to={item.url}
                     onClick={toggleSidebar}
-                    className="block text-gray-300 transition-colors hover:text-white"
+                    className="block text-gray-300 transition-colors hover:text-[--color-accent]"
                   >
                     {item.icon} {item.label}
                   </Link>

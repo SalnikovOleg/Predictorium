@@ -14,9 +14,9 @@ class EventController extends Controller
         protected EventService $service,
     ) {}
 
-    public function show(Request $request, int $tournamentId): EventShowResource|JsonResponse
+    public function show(Request $request, string $slug): EventShowResource|JsonResponse
     {
-        $event = $this->service->getById($tournamentId);
+        $event = $this->service->getBySlug($slug);
 
         if (!$event) {
             return $this->notFoundReponse();

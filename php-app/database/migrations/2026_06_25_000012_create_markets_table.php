@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
             $table->foreignId('market_template_id')->constrained()->cascadeOnDelete();
-            $table->string('description');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

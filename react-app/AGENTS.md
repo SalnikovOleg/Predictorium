@@ -24,7 +24,7 @@ Endpoints are documented in `API.md`. Key routes: `/api/ping`, `/api/home`, `/ap
 
 ## Styling
 
-CSS custom properties in `index.css`, light/dark via `prefers-color-scheme`. No CSS framework. System fonts (`system-ui`). Responsive breakpoint at 1024px.
+Tailwindcss. The UI Architecture and Design Rule in MEMORY
 
 ## Docker
 

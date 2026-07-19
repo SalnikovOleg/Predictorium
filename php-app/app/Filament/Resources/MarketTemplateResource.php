@@ -38,12 +38,14 @@ class MarketTemplateResource extends \Filament\Resources\Resource
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
+                        Forms\Components\TextInput::make('description')
+                            ->maxLength(255),
                         Forms\Components\Select::make('market_type_id')
                             ->relationship('marketType', 'name')
                             ->required()
                             ->searchable()
                             ->preload(),
-                        Forms\Components\Select::make('outcome_template_ids')
+                        Forms\Components\Select::make('outcome_type_ids')
                             ->options(OutcomeType::pluck('name', 'id'))
                             ->multiple()
                             ->searchable()
@@ -59,6 +61,9 @@ class MarketTemplateResource extends \Filament\Resources\Resource
                 Tables\Columns\TextColumn::make('id')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('name')
+                    ->searchable()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('description')
                     ->searchable()
                     ->sortable(),
                 Tables\Columns\TextColumn::make('marketType.name')

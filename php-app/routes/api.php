@@ -20,8 +20,8 @@ Route::get('/what_to_play', [SteamGamesController::class, 'what_to_play'])->name
 
 /**** Trading */
 Route::get('/categories/{slug}', [CategoryController::class, 'show'])->name('api.categories.show');
-Route::get('/tournaments/{tournamentId}', [TournamentController::class, 'show'])->name('api.tournaments.show');
-Route::get('/events/{eventId}', [EventController::class, 'show'])->name('api.events.show');
+Route::get('/tournaments/{slug}', [TournamentController::class, 'show'])->name('api.tournaments.show');
+Route::get('/events/{slug}', [EventController::class, 'show'])->name('api.events.show');
 
 /**** Auth  */
 Route::post('/auth/register', [AuthController::class, 'register'])->name('api.auth.register');

@@ -11,15 +11,16 @@ class MarketTemplate extends Model
     
     protected $fillable = [
         'name',
+        'description',
         'category_id',
         'market_type_id',
-        'outcome_template_ids',
+        'outcome_type_ids',
     ];
 
     protected function casts(): array
     {
         return [
-            'outcome_template_ids' => 'array',
+            'outcome_type_ids' => 'array',
         ];
     }
 

@@ -40,7 +40,7 @@ class CreateMarket extends CreateRecord
         }
 
         $marketTypeId = (int) $template->market_type_id;
-        $outcomeTypeIds = $template->outcome_template_ids ?? [];
+        $outcomeTypeIds = $template->outcome_type_ids ?? [];
 
         $yesTypeId = $this->findOutcomeTypeId('yes');
         $noTypeId = $this->findOutcomeTypeId('no');

@@ -8,6 +8,7 @@ export interface TournamentSummary {
   description: string | null
   start_date: string
   end_date: string
+  events_count?: number
 }
 
 export interface Tournament extends TournamentSummary {

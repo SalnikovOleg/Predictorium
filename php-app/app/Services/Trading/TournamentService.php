@@ -18,10 +18,10 @@ class TournamentService
         return $this->repository->getByCategorySlug($slug, $locale);
     }
 
-    public function getById(int $tournamentId): ?Tournament
+    public function getBySlug(string $slug): ?Tournament
     {
         $locale = app()->getLocale();
 
-        return $this->repository->getById($tournamentId, $locale);
+        return $this->repository->getBySlug($slug, $locale);
     }
 }
