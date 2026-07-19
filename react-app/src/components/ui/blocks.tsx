@@ -1,5 +1,3 @@
-import { cn } from "@/lib/utils"
-
 import { PeriodLine } from "@/components/ui/date"
 
 interface ComponentProps {
@@ -8,7 +6,7 @@ interface ComponentProps {
   className?: string
 }
 
-export function SimpleAsideBlock({children, className }: ComponentProps) {
+export function SimpleAsideBlock({children }: ComponentProps) {
   return (
     <>
       <div className="relative w-full border rounded-2xl border-teal-500/50 bg-[#0a1e24]/40">
@@ -27,7 +25,7 @@ export function SimpleAsideBlock({children, className }: ComponentProps) {
   )
 }
 
-export function CategoryAsideBlock({children, content, className }: ComponentProps) {
+export function CategoryAsideBlock({children, content }: ComponentProps) {
   return (
     <>
       <SimpleAsideBlock>
@@ -52,7 +50,7 @@ interface TournamentAsideBlockProps {
   className?: string
 }
 
-export function TournamentAsideBlock({ children, description, start_date, end_date, className }: TournamentAsideBlockProps) {
+export function TournamentAsideBlock({ children, description, start_date, end_date}: TournamentAsideBlockProps) {
   return (
     <>
       <SimpleAsideBlock>

@@ -20,6 +20,6 @@ export function useMainMenu() {
       data: { items: normalizeMenuItems(data.data.items) },
     }),
   })
-console.log(response);
+
   return response;
 }

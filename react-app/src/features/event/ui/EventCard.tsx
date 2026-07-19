@@ -1,5 +1,5 @@
 import { Link } from 'react-router'
-import type { EventSummary } from '@/shared/types'
+import type { EventSummary } from '@/features/event/types'
 import { Card } from '@/components/ui/card'
 import { H3 } from '@/components/ui/common'
 import { DateLine } from '@/components/ui/date'

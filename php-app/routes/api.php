@@ -3,6 +3,7 @@
 use App\Http\Controllers\Auth\AuthController;
 use App\Http\Controllers\Trading\CategoryController;
 use App\Http\Controllers\Trading\EventController;
+use App\Http\Controllers\Trading\StakeController;
 use App\Http\Controllers\Trading\TournamentController;
 use App\Http\Controllers\Web\HomeController;
 use App\Http\Controllers\Web\NavController;
@@ -30,4 +31,8 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.log
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
     Route::get('/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
+
+    /**** Trading - Authenticated */
+    Route::get('/stakes', [StakeController::class, 'index'])->name('api.stakes.index');
+    Route::post('/stake', [StakeController::class, 'store'])->name('api.stakes.store');
 });

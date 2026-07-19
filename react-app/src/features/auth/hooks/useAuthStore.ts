@@ -1,0 +1,39 @@
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+import type { User } from '../types'
+
+interface AuthState {
+  user: User | null
+  token: string | null
+  isAuthenticated: boolean
+  loginModalOpen: boolean
+  setAuth: (user: User, token: string) => void
+  logout: () => void
+  openLoginModal: () => void
+  closeLoginModal: () => void
+}
+
+export const useAuthStore = create<AuthState>()(
+  persist(
+    (set) => ({
+      user: null,
+      token: null,
+      isAuthenticated: false,
+      loginModalOpen: false,
+      setAuth: (user, token) => {
+        localStorage.setItem('auth_token', token)
+        set({ user, token, isAuthenticated: true })
+      },
+      logout: () => {
+        localStorage.removeItem('auth_token')
+        set({ user: null, token: null, isAuthenticated: false })
+      },
+      openLoginModal: () => set({ loginModalOpen: true }),
+      closeLoginModal: () => set({ loginModalOpen: false }),
+    }),
+    {
+      name: 'auth-storage',
+      partialize: (state) => ({ user: state.user, token: state.token, isAuthenticated: state.isAuthenticated }),
+    },
+  ),
+)

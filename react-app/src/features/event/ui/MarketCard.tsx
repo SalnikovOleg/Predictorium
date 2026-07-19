@@ -1,15 +1,17 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { Market } from '@/shared/types'
+import type { Market } from '../types'
 import { MarketOutcomeButton } from './MarketOutcomeButton'
 
 interface MarketCardProps {
   market: Market
   selectedOutcomeId: number | null
   onSelectOutcome: (outcomeId: number) => void
+  isPending?: boolean
+  isDisabled?: boolean
 }
 
-export function MarketCard({ market, selectedOutcomeId, onSelectOutcome }: MarketCardProps) {
+export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPending, isDisabled }: MarketCardProps) {
   const [showAll, setShowAll] = useState(false)
   const isMultiOutcome = market.market_type_id === 3
   const visibleOutcomes = isMultiOutcome && !showAll ? market.outcomes.slice(0, 8) : market.outcomes
@@ -58,6 +60,8 @@ export function MarketCard({ market, selectedOutcomeId, onSelectOutcome }: Marke
             key={outcome.id}
             outcome={outcome}
             isSelected={selectedOutcomeId === outcome.id}
+            isLoading={isPending && selectedOutcomeId === outcome.id}
+            isDisabled={isDisabled || (isPending && selectedOutcomeId !== outcome.id)}
             onClick={() => onSelectOutcome(outcome.id)}
           />
         ))}

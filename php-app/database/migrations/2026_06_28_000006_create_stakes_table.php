@@ -13,13 +13,20 @@ return new class extends Migration
             $table->foreignId('group_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('event_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('outcome_id')->constrained()->cascadeOnDelete();
-            $table->double('sum_in');
-            $table->double('coef');
+            $table->bigInteger('market_id');
+            $table->foreignId('outcome_id');
+            $table->json('outcome_ids')->nullable();
+            $table->double('sum_in')->nullable();
+            $table->double('coef')->nullable();
             $table->enum('result', ['win', 'lose', 'return'])->nullable();
-            $table->double('sum_out');
+            $table->double('sum_out')->nullable();
             $table->timestamps();
+
+            $table->index(['group_id', 'user_id', 'event_id']);
+            $table->index(['market_id']);
         });
+
+
     }
 
     public function down(): void

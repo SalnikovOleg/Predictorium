@@ -4,7 +4,7 @@ interface IProps{
 }
 
 export function EventIcon({status}:IProps) {
-  const iconName = status == 'active' ? 'icon_active' : 'ison_flags';
+  const iconName = status == 'active' ? 'icon_active' : 'icon_flags';
   return (
     <div className="flex h-14 w-14 ">
       <img src={`/public/assets/icons/${iconName}.png`}/>

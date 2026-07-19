@@ -1,4 +1,4 @@
 export { useEventsByTournament } from './hooks/useEventsByTournament'
-export { useEvent, useCreateStake } from './hooks/useEvent'
+export { useEvent, useStakes, useCreateStake } from './hooks/useEvent'
 export { EventCard } from './ui/EventCard'
-export type { EventSummary, Event } from './types'
+export type { EventSummary, Event, Market, Outcome, Stake } from './types'

@@ -1,4 +1,5 @@
-import type { ApiResponse, PageContent, EventSummary } from '@/shared/types'
+import type { ApiResponse, PageContent } from '@/shared/types'
+import type { EventSummary } from '@/features/event/types'
 
 export interface TournamentSummary {
   id: number

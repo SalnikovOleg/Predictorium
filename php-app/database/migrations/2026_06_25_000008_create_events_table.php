@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('tournament_id')->constrained()->cascadeOnDelete();
             $table->string('name');
             $table->string('slug')->unique();;
-            $table->enum('status', ['draft', 'active', 'finished', 'archived'])->default('draft');
+            $table->enum('status', ['draft', 'active', 'progress', 'finished', 'archived'])->default('draft');
             $table->dateTime('start_date')->nullable();
             $table->dateTime('end_date')->nullable();
             $table->string('ext_id')->nullable();

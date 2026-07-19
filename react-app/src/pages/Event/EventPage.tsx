@@ -1,18 +1,36 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useParams, Link } from 'react-router'
-import { useEvent, useCreateStake } from '@/features/event'
+import { useEvent, useStakes, useCreateStake } from '@/features/event'
+import { useAuthStore, useRequireAuth } from '@/features/auth'
 import { H1, H2, LoadingSpinner, ErrorMessage, TournamentHr } from '@/components/ui/common'
 import { DateLine } from '@/components/ui/date'
 import { MarketCard } from '@/features/event/ui/MarketCard'
 
 const CURRENT_GROUP_ID = 1
-const CURRENT_USER_ID = 1
 
 export function EventPage() {
   const { slug } = useParams<{ slug: string }>()
   const { data, isLoading, error } = useEvent(slug!)
   const createStake = useCreateStake()
+  const user = useAuthStore((s) => s.user)
+  const { requireAuth } = useRequireAuth()
   const [selectedOutcomes, setSelectedOutcomes] = useState<Record<number, number | null>>({})
+
+  const { data: stakes } = useStakes(
+    CURRENT_GROUP_ID,
+    user?.id,
+    data?.id,
+  )
+
+  useEffect(() => {
+    if (!stakes || stakes.length === 0) return
+
+    const initial: Record<number, number | null> = {}
+    for (const stake of stakes) {
+      initial[stake.market_id] = stake.outcome_id
+    }
+    setSelectedOutcomes(initial)
+  }, [stakes])
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -28,23 +46,30 @@ export function EventPage() {
     return <ErrorMessage message="Event not found" />
   }
 
+  const isStakesLocked = event.status !== 'active'
+
   const handleSelectOutcome = (marketId: number, outcomeId: number) => {
-    const currentSelected = selectedOutcomes[marketId]
-    const newSelected = currentSelected === outcomeId ? null : outcomeId
+    if (isStakesLocked) return
 
-    setSelectedOutcomes((prev) => ({
-      ...prev,
-      [marketId]: newSelected,
-    }))
+    requireAuth(() => {
+      const currentSelected = selectedOutcomes[marketId]
+      const newSelected = currentSelected === outcomeId ? null : outcomeId
 
-    if (newSelected !== null) {
-      createStake.mutate({
-        group_id: CURRENT_GROUP_ID,
-        user_id: CURRENT_USER_ID,
-        event_id: event.id,
-        outcome_id: newSelected,
-      })
-    }
+      setSelectedOutcomes((prev) => ({
+        ...prev,
+        [marketId]: newSelected,
+      }))
+
+      if (newSelected !== null && user) {
+        createStake.mutate({
+          group_id: CURRENT_GROUP_ID,
+          user_id: user.id,
+          event_id: event.id,
+          market_id: marketId,
+          outcome_id: newSelected,
+        })
+      }
+    })
   }
 
   return (
@@ -67,6 +92,12 @@ export function EventPage() {
 
           <TournamentHr />
 
+          {isStakesLocked && (
+            <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4">
+              <p className="text-sm text-yellow-400 font-medium">Stakes is locked</p>
+            </div>
+          )}
+
           {event.markets.length === 0 ? (
             <p className="text-gray-400">No markets available for this event.</p>
           ) : (
@@ -77,6 +108,8 @@ export function EventPage() {
                   market={market}
                   selectedOutcomeId={selectedOutcomes[market.id] ?? null}
                   onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
+                  isPending={createStake.isPending}
+                  isDisabled={isStakesLocked}
                 />
               ))}
             </div>

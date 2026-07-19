@@ -1,27 +1,13 @@
 import { Link } from 'react-router'
 import { useMainMenu } from '../hooks/useMainMenu'
 import { useAppStore } from '../../../app/store'
-import { ErrorMessage } from '@/components/ui/common'
-
-function MenuIcon() {
-  return (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16M4 18h16" />
-    </svg>
-  )
-}
-
-function CloseIcon() {
-  return (
-    <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-    </svg>
-  )
-}
+import { useAuthStore } from '@/features/auth'
+import { ErrorMessage, MenuIcon, CloseIcon } from '@/components/ui/common'
 
 export function NavBar() {
   const { data, isLoading, error } = useMainMenu()
   const { sidebarOpen, toggleSidebar } = useAppStore()
+  const { isAuthenticated, user, openLoginModal } = useAuthStore()
 
   return (
     <>
@@ -42,12 +28,30 @@ export function NavBar() {
               <li key={item.url}>
                 <Link
                   to={item.url}
-                  className="text-gray-300 transition-colors hover:text-[--color-accent]"
+                  className="text-gray-300 transition-colors hover:text-[var(--color-accent)]"
                 >
                   {item.icon} {item.label}
                 </Link>
               </li>
             ))}
+            <li>
+              {isAuthenticated && user ? (
+                <Link
+                  to={`/profile/${user.id}`}
+                  className="text-gray-300 transition-colors hover:text-[var(--color-accent)]"
+                >
+                  👽 Profile
+                </Link>
+              ) : (
+                <button
+                  type="button"
+                  onClick={openLoginModal}
+                  className="text-gray-300 transition-colors hover:text-[var(--color-accent)]"
+                >
+                  🔑 Login
+                </button>
+              )}
+            </li>
           </ul>
         )}
       </nav>
@@ -84,6 +88,28 @@ export function NavBar() {
                   </Link>
                 </li>
               ))}
+              <li>
+                {isAuthenticated && user ? (
+                  <Link
+                    to={`/profile/${user.id}`}
+                    onClick={toggleSidebar}
+                    className="block text-gray-300 transition-colors hover:text-[--color-accent]"
+                  >
+                    👽 Profile
+                  </Link>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      toggleSidebar()
+                      openLoginModal()
+                    }}
+                    className="block text-left text-gray-300 transition-colors hover:text-[--color-accent]"
+                  >
+                    🔑 Login
+                  </button>
+                )}
+              </li>
             </ul>
           )}
         </nav>

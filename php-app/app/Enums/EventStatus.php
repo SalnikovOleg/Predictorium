@@ -6,6 +6,7 @@ enum EventStatus: string
 {
     case Draft = 'draft';
     case Active = 'active';
+    case Progress = 'progress';
     case Finished = 'finished';
     case Archived = 'archived';
 
@@ -14,6 +15,7 @@ enum EventStatus: string
         return match ($this) {
             self::Draft => 'Draft',
             self::Active => 'Active',
+            self::Progress => 'progress',
             self::Finished => 'Finished',
             self::Archived => 'Archived',
         };
@@ -24,6 +26,7 @@ enum EventStatus: string
         return match ($this) {
             self::Draft => 'gray',
             self::Active => 'success',
+            self::Progress => 'blue',
             self::Finished => 'info',
             self::Archived => 'danger',
         };
