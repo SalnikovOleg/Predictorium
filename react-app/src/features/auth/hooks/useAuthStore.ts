@@ -8,6 +8,7 @@ interface AuthState {
   isAuthenticated: boolean
   loginModalOpen: boolean
   setAuth: (user: User, token: string) => void
+  setUser: (user: User) => void
   logout: () => void
   openLoginModal: () => void
   closeLoginModal: () => void
@@ -24,6 +25,7 @@ export const useAuthStore = create<AuthState>()(
         localStorage.setItem('auth_token', token)
         set({ user, token, isAuthenticated: true })
       },
+      setUser: (user) => set({ user }),
       logout: () => {
         localStorage.removeItem('auth_token')
         set({ user: null, token: null, isAuthenticated: false })

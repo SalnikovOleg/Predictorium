@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\ResultResource\Pages;
 
+use App\Filament\Resources\EventResource;
 use App\Filament\Resources\ResultResource;
 use App\Models\Event;
 use Filament\Actions;
@@ -58,8 +59,14 @@ class ListResults extends ListRecords
         $eventId = $this->getCachedEventId();
 
         return [
+            Actions\Action::make('backToEvent')
+                ->label('Back to Event')
+                ->icon('heroicon-o-arrow-left')
+                ->url(fn () => $eventId ? EventResource::getUrl('edit', ['record' => $eventId]) : null)
+                ->visible(fn () => $eventId !== null),
+
             Actions\CreateAction::make()
-                ->schema(fn () => ResultResource::getModalForm())
+                ->schema(fn () => ResultResource::getModalForm(eventId: $eventId))
                 ->data([
                     'event_id' => $eventId,
                 ]),

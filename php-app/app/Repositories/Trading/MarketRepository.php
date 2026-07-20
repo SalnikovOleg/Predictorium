@@ -18,4 +18,12 @@ class MarketRepository
             ->where('event_id', $eventId)
             ->get();
     }
+
+    public function existsByEventAndTemplate(int $eventId, int $templateId): bool
+    {
+        return $this->model
+            ->where('event_id', $eventId)
+            ->where('market_template_id', $templateId)
+            ->exists();
+    }
 }

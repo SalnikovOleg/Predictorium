@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { fetchEvent, fetchStakes, createStake } from '../api/event'
+import { fetchEvent, fetchStakes, createStake, fetchMarketStats } from '../api/event'
 
 export function useEvent(slug: string) {
   return useQuery({
@@ -42,4 +42,12 @@ export function useCreateStake() {
     ...mutation,
     mutate: mutateDebounced,
   }
+}
+
+export function useMarketStats(marketId: number | null) {
+  return useQuery({
+    queryKey: ['marketStats', marketId],
+    queryFn: () => fetchMarketStats(marketId!),
+    enabled: marketId !== null,
+  })
 }

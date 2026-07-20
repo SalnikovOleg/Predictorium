@@ -6,6 +6,7 @@ use App\Filament\Resources\MarketTemplateResource\Pages;
 use App\Models\MarketTemplate;
 use App\Models\MarketType;
 use App\Models\OutcomeType;
+use App\Models\ResultType;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -50,6 +51,11 @@ class MarketTemplateResource extends \Filament\Resources\Resource
                             ->multiple()
                             ->searchable()
                             ->preload(),
+                        Forms\Components\Select::make('result_type_id')
+                            ->relationship('resultType', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->nullable(),
                     ]),
             ]);
     }

@@ -40,3 +40,9 @@ export interface Stake {
   outcome_id: number
   outcome_ids: number[] | null
 }
+
+export interface MarketStat {
+  outcome_id: number
+  name: string
+  percent: number
+}

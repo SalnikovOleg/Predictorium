@@ -35,6 +35,16 @@ class StakeController extends Controller
         ]);
     }
 
+    public function stat(int $marketId): JsonResponse
+    {
+        $stats = $this->service->getStatByMarketId($marketId);
+
+        return response()->json([
+            'status' => true,
+            'data' => $stats,
+        ]);
+    }
+
     public function store(StoreStakeRequest $request): StakeResource|JsonResponse
     {
         $stake = $this->service->store($request->validated());

@@ -94,7 +94,7 @@ export function EventPage() {
 
           {isStakesLocked && (
             <div className="rounded-lg border border-yellow-500/30 bg-yellow-500/10 p-4">
-              <p className="text-sm text-yellow-400 font-medium">Stakes is locked</p>
+              <p className="text-sm text-yellow-400 font-medium">Stakes is locked. Event is {event.status}</p>
             </div>
           )}
 

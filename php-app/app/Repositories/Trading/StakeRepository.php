@@ -48,4 +48,13 @@ class StakeRepository
 
         return $stake->fresh();
     }
+
+    public function getStatByMarketId(int $marketId): Collection
+    {
+        return $this->model
+            ->selectRaw('outcome_id, SUM(sum_in) as total_stakes')
+            ->where('market_id', $marketId)
+            ->groupBy('outcome_id')
+            ->get();
+    }
 }

@@ -37,8 +37,8 @@ class OutcomesRelationManager extends RelationManager
                 Forms\Components\TextInput::make('coef')
                     ->label('Coefficient')
                     ->numeric()
-                    ->required()
-                    ->minValue(1.01)
+                    ->default(1)
+                    ->minValue(1.0)
                     ->step(0.01),
 
                 Forms\Components\Select::make('result')
@@ -65,7 +65,7 @@ class OutcomesRelationManager extends RelationManager
                 Tables\Columns\TextInputColumn::make('coef')
                     ->label('Coefficient')
                     ->type('number')
-                    ->rules(['required', 'numeric', 'min:1.01'])
+                    ->rules(['required', 'numeric', 'min:1.0'])
                     ->step(0.01),
 
                 Tables\Columns\TextColumn::make('result')

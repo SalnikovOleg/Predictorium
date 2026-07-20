@@ -61,6 +61,15 @@ class MarketResource extends \Filament\Resources\Resource
                                     }
                                 }
                             })
+                            ->afterStateUpdated(function ($set, $state) {
+                                if ($state) {
+                                    $template = MarketTemplate::with('marketType')->find($state);
+                                    if ($template) {
+                                        $set('market_type_id', $template->market_type_id);
+                                        $set('param1', $template->param1);
+                                    }
+                                }
+                            })
                             ->required(),
 
                         Forms\Components\Hidden::make('market_type_id'),
@@ -82,7 +91,7 @@ class MarketResource extends \Filament\Resources\Resource
                             })
                             ->searchable()
                             ->preload()
-                            ->disabled(fn (?Market $record) => $record !== null)
+                            //->disabled(fn (?Market $record) => $record !== null)
                             ->visible(fn (Get $get) => (int) $get('market_type_id') === 2)
                             ->afterStateUpdated(function ($set, $get, $state) {
                                 $template = MarketTemplate::find($get('market_template_id'));

@@ -8,12 +8,13 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class MarketTemplate extends Model
 {
     use SoftDeletes;
-    
+
     protected $fillable = [
         'name',
         'description',
         'category_id',
         'market_type_id',
+        'result_type_id',
         'outcome_type_ids',
     ];
 
@@ -27,5 +28,10 @@ class MarketTemplate extends Model
     public function marketType()
     {
         return $this->belongsTo(MarketType::class);
+    }
+
+    public function resultType()
+    {
+        return $this->belongsTo(ResultType::class);
     }
 }

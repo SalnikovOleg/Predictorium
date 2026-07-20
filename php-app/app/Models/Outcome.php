@@ -10,6 +10,7 @@ class Outcome extends Model
     protected $fillable = [
         'market_id',
         'outcome_type_id',
+        'result_type_id',
         'participant_id',
         'coef',
         'result',
@@ -36,5 +37,10 @@ class Outcome extends Model
     public function participant()
     {
         return $this->belongsTo(Participant::class);
+    }
+
+    public function resultType()
+    {
+        return $this->belongsTo(ResultType::class, 'result_type_id');
     }
 }

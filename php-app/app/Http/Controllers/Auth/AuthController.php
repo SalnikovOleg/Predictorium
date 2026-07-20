@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Exceptions\InvalidPasswordException;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
+use App\Http\Requests\Auth\UpdateUserRequest;
 use App\Http\Resources\Auth\UserResource;
 use App\Services\Auth\CustomerService;
 use Illuminate\Http\JsonResponse;
@@ -65,5 +67,23 @@ class AuthController extends Controller
     public function me(Request $request): UserResource
     {
         return new UserResource($request->user());
+    }
+
+    public function update(UpdateUserRequest $request): UserResource|JsonResponse
+    {
+        try {
+            $customer = $this->service->update($request->user(), $request->validated());
+        } catch (InvalidPasswordException $e) {
+            return response()->json([
+                'status' => false,
+                'message' => $e->getMessage(),
+            ], 422);
+        }
+
+        return (new UserResource($customer))
+            ->additional([
+                'status' => true,
+                'message' => 'User updated successfully',
+            ]);
     }
 }

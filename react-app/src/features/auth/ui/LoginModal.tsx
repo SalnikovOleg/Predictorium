@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { useLogin } from '../hooks/useLogin'
 import { useRegister } from '../hooks/useRegister'
+import { ButtonPrimary } from '@/components/ui/buttons'
+import {H2, H3} from '@/components/ui/common'
 
 interface LoginModalProps {
   open: boolean
@@ -64,9 +66,9 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-6 flex items-center justify-between">
-          <h2 className="text-xl font-bold text-white">
+          <H3 className="text-2xl">
             {mode === 'login' ? 'Login' : 'Register'}
-          </h2>
+          </H3>
           <button
             type="button"
             onClick={onClose}
@@ -151,13 +153,13 @@ export function LoginModal({ open, onClose }: LoginModalProps) {
             </div>
           )}
 
-          <button
+          <ButtonPrimary
             type="submit"
-            disabled={isLoading}
-            className="w-full rounded bg-teal-500 py-2.5 font-bold text-[#0a1e24] transition-colors hover:bg-teal-400 disabled:opacity-50"
+            loading={isLoading}
+            fullWidth
           >
-            {isLoading ? 'Loading...' : mode === 'login' ? 'Login' : 'Register'}
-          </button>
+            {mode === 'login' ? 'Login' : 'Register'}
+          </ButtonPrimary>
         </form>
 
         <p className="mt-4 text-center text-sm text-gray-400">

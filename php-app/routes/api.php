@@ -31,8 +31,10 @@ Route::post('/auth/login', [AuthController::class, 'login'])->name('api.auth.log
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/auth/logout', [AuthController::class, 'logout'])->name('api.auth.logout');
     Route::get('/auth/me', [AuthController::class, 'me'])->name('api.auth.me');
+    Route::put('/auth/update', [AuthController::class, 'update'])->name('api.auth.update');
 
     /**** Trading - Authenticated */
     Route::get('/stakes', [StakeController::class, 'index'])->name('api.stakes.index');
-    Route::post('/stake', [StakeController::class, 'store'])->name('api.stakes.store');
+    Route::get('/stakes/stat/{marketId}', [StakeController::class, 'stat'])->name('api.stakes.stat');
+    Route::middleware('throttle:30,0.5')->post('/stake', [StakeController::class, 'store'])->name('api.stakes.store');
 });

@@ -11,7 +11,8 @@ return new class extends Migration
         Schema::create('outcomes', function (Blueprint $table) {
             $table->id();
             $table->foreignId('market_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('outcome_type_id');
+            $table->integer('outcome_type_id');
+            $table->integer('result_type_id');
             $table->foreignId('participant_id')->nullable()->constrained()->nullOnDelete();
             $table->decimal('coef', 5, 2);
             $table->enum('result', ['win', 'lose', 'return'])->nullable();

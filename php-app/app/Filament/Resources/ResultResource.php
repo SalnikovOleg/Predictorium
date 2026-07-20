@@ -36,12 +36,13 @@ class ResultResource extends \Filament\Resources\Resource
             ->schema(self::getModalForm());
     }
 
-    public static function getModalForm(?Result $record = null): array
+    public static function getModalForm(?Result $record = null, ?int $eventId = null): array
     {
+        $resolvedEventId = $eventId ?? $record?->event_id;
+
         return [
             Forms\Components\Hidden::make('event_id')
-                ->default(fn () => request()->query('tableFilters')['event_id'] ?? null)
-                ->reactive(),
+                ->default($resolvedEventId),
 
             Forms\Components\Select::make('result_type_id')
                 ->label('Result Type')
@@ -59,7 +60,7 @@ class ResultResource extends \Filament\Resources\Resource
             // Single participant (for value_type = 'participant')
             Forms\Components\Select::make('participant_id')
                 ->label('Participant')
-                ->options(function (Get $get) {
+                ->options(function (Get $get) use ($resolvedEventId) {
                     $resultTypeId = $get('result_type_id');
                     if (! $resultTypeId) {
                         return [];
@@ -68,15 +69,8 @@ class ResultResource extends \Filament\Resources\Resource
                     if (! $resultType || $resultType->value_type !== 'participant') {
                         return [];
                     }
-                    $eventId = $get('event_id');
-                    if (! $eventId) {
-                        return [];
-                    }
 
-                    return \App\Models\Event::find($eventId)
-                        ?->participants()
-                        ->pluck('participants.name', 'participants.id')
-                        ->toArray() ?? [];
+                    return self::loadParticipantOptions($resolvedEventId);
                 })
                 ->searchable()
                 ->preload()
@@ -103,16 +97,8 @@ class ResultResource extends \Filament\Resources\Resource
                         ->maxValue(999),
                     Forms\Components\Select::make('participant_id')
                         ->label('Participant')
-                        ->options(function (Get $get) {
-                            $eventId = $get('../../event_id');
-                            if (! $eventId) {
-                                return [];
-                            }
-
-                            return \App\Models\Event::find($eventId)
-                                ?->participants()
-                                ->pluck('participants.name', 'participants.id')
-                                ->toArray() ?? [];
+                        ->options(function (Get $get) use ($resolvedEventId) {
+                            return self::loadParticipantOptions($resolvedEventId);
                         })
                         ->searchable()
                         ->preload()
@@ -167,7 +153,7 @@ class ResultResource extends \Filament\Resources\Resource
             ])
             ->recordActions([
                 Actions\EditAction::make()
-                    ->schema(fn (Result $record): array => self::getModalForm($record)),
+                    ->schema(fn (Result $record): array => self::getModalForm($record, $record->event_id)),
             ])
             ->toolbarActions([
                 Actions\BulkActionGroup::make([
@@ -186,5 +172,17 @@ class ResultResource extends \Filament\Resources\Resource
         return [
             'index' => Pages\ListResults::route('/'),
         ];
+    }
+
+    private static function loadParticipantOptions(?int $eventId): array
+    {
+        if (! $eventId) {
+            return [];
+        }
+
+        return \App\Models\Event::find($eventId)
+            ?->participants()
+            ->pluck('participants.name', 'participants.id')
+            ->toArray() ?? [];
     }
 }

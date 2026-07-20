@@ -29,3 +29,22 @@ export async function fetchMe(): Promise<{ data: User }> {
   const { data } = await apiClient.get<{ data: User }>('/auth/me')
   return data
 }
+
+export interface UpdateUserPayload {
+  name?: string
+  email?: string
+  password?: string
+  password_confirmation?: string
+  current_password?: string
+}
+
+export interface UpdateUserResponse {
+  status: boolean
+  message: string
+  data: User
+}
+
+export async function updateUser(payload: UpdateUserPayload): Promise<UpdateUserResponse> {
+  const { data } = await apiClient.put<UpdateUserResponse>('/auth/update', payload)
+  return data
+}

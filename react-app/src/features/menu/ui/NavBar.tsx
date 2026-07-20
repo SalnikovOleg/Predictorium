@@ -40,7 +40,7 @@ export function NavBar() {
                   to={`/profile/${user.id}`}
                   className="text-gray-300 transition-colors hover:text-[var(--color-accent)]"
                 >
-                  👽 Profile
+                  👽 Profile ({user.name})
                 </Link>
               ) : (
                 <button
@@ -95,7 +95,7 @@ export function NavBar() {
                     onClick={toggleSidebar}
                     className="block text-gray-300 transition-colors hover:text-[--color-accent]"
                   >
-                    👽 Profile
+                    👽 Profile ({user.name})
                   </Link>
                 ) : (
                   <button
