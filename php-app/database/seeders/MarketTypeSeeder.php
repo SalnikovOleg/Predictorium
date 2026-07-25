@@ -14,6 +14,7 @@ class MarketTypeSeeder extends Seeder
             ['name' => 'Participant ( Yes / No )'],
             ['name' => 'Select participants from the list'],
             ['name' => 'Select one from two (participants)'],
+            ['name' => 'Outcome list'],
         ];
 
         DB::table('market_types')->insert($marketTypes);

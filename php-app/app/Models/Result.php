@@ -22,6 +22,15 @@ class Result extends Model
         ];
     }
 
+    public function setAttribute($key, $value)
+    {
+        if ($key === 'value' && is_array($value) && !empty($value) && is_array($value[0] ?? null) && isset($value[0]['participant_id'])) {
+            $value = array_column($value, 'participant_id');
+        }
+
+        return parent::setAttribute($key, $value);
+    }
+
     public function event()
     {
         return $this->belongsTo(Event::class);

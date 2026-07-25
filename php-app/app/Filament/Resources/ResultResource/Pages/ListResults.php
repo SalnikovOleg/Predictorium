@@ -5,7 +5,9 @@ namespace App\Filament\Resources\ResultResource\Pages;
 use App\Filament\Resources\EventResource;
 use App\Filament\Resources\ResultResource;
 use App\Models\Event;
+use App\Services\Trading\OutcomeResultService;
 use Filament\Actions;
+use Filament\Notifications\Notification;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Tables\Table;
 
@@ -64,6 +66,33 @@ class ListResults extends ListRecords
                 ->icon('heroicon-o-arrow-left')
                 ->url(fn () => $eventId ? EventResource::getUrl('edit', ['record' => $eventId]) : null)
                 ->visible(fn () => $eventId !== null),
+
+            Actions\Action::make('calculate')
+                ->label('Calculate')
+                ->icon('heroicon-o-calculator')
+                ->color('success')
+                ->requiresConfirmation()
+                ->modalHeading('Calculate Results')
+                ->modalDescription('This will determine win/lose for all outcomes based on the recorded results. Continue?')
+                ->visible(fn () => $eventId !== null)
+                ->action(function () use ($eventId) {
+                    try {
+                        app(OutcomeResultService::class)
+                            ->calculateForEvent($eventId);
+
+                        Notification::make()
+                            ->title('Results calculated')
+                            ->body('All outcomes have been updated based on the recorded results.')
+                            ->success()
+                            ->send();
+                    } catch (\InvalidArgumentException $e) {
+                        Notification::make()
+                            ->title('Calculation failed')
+                            ->body($e->getMessage())
+                            ->danger()
+                            ->send();
+                    }
+                }),
 
             Actions\CreateAction::make()
                 ->schema(fn () => ResultResource::getModalForm(eventId: $eventId))

@@ -21,7 +21,7 @@ class GroupResource extends \Filament\Resources\Resource
 
     protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 51;
 
     protected static ?string $modelLabel = 'Group';
 

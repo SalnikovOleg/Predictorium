@@ -19,7 +19,7 @@ class UserResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-users';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Access Control';
+    protected static UnitEnum|string|null $navigationGroup = 'Customers';
 
     protected static ?int $navigationSort = 50;
 

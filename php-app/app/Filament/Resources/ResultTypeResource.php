@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ValueType;
 use App\Filament\Resources\ResultTypeResource\Pages;
 use App\Models\ResultType;
 use BackedEnum;
@@ -42,10 +43,7 @@ class ResultTypeResource extends \Filament\Resources\Resource
                             ->searchable()
                             ->preload(),
                         Forms\Components\Select::make('value_type')
-                            ->options([
-                                'positions' => 'Positions',
-                                'participant' => 'Participant',
-                            ])
+                            ->options(ValueType::class)
                             ->required(),
                     ]),
             ]);
@@ -78,10 +76,7 @@ class ResultTypeResource extends \Filament\Resources\Resource
                     ->relationship('category', 'name')
                     ->label('Category'),
                 Tables\Filters\SelectFilter::make('value_type')
-                    ->options([
-                        'positions' => 'Positions',
-                        'participant' => 'Participant',
-                    ]),
+                    ->options(ValueType::class),
             ])
             ->recordActions([
                 Actions\EditAction::make()->label(''),

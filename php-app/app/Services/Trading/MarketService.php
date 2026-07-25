@@ -57,7 +57,7 @@ class MarketService
     {
         $marketTypeId = (int) $template->market_type_id;
 
-        if ($marketTypeId === 1) {
+        if ($marketTypeId === 1 || $marketTypeId === 5) {
             $outcomeTypeIds = $template->outcome_type_ids ?? [];
             foreach ($outcomeTypeIds as $typeId) {
                 Outcome::create([

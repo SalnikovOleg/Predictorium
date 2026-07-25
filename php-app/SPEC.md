@@ -68,7 +68,7 @@ Linked to Event via event_id.
 
 result_type_id: Defines the metric (e.g., Race Winner, Best Lap, Qualification Winner).
 
-value: JSON storage for complex structures (e.g., [{"p": 1, "participant_id": 123}, ...]).
+value: JSON storage — format depends on value_type: positions → [participant_id, ...] (index = place, 0 = 1st); participant → not used (stored in participant_id column); score → {"score": "X:Y"}.
 
 ResultTypes: Configurable result definitions scoped by category_id.
 

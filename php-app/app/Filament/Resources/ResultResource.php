@@ -2,7 +2,9 @@
 
 namespace App\Filament\Resources;
 
+use App\Enums\ValueType;
 use App\Filament\Resources\ResultResource\Pages;
+use App\Models\Event;
 use App\Models\Result;
 use App\Models\ResultType;
 use BackedEnum;
@@ -46,7 +48,22 @@ class ResultResource extends \Filament\Resources\Resource
 
             Forms\Components\Select::make('result_type_id')
                 ->label('Result Type')
-                ->relationship('resultType', 'name')
+                ->relationship('resultType', 'name', fn ($query) => $query
+                    ->when($resolvedEventId, function ($q) use ($resolvedEventId, $record) {
+                        $category = Event::find($resolvedEventId)?->tournament?->category;
+                        if ($category) {
+                            $q->where('category_id', $category->id);
+                        }
+                        $usedTypeIds = Result::where('event_id', $resolvedEventId)
+                            ->pluck('result_type_id');
+                        if ($record) {
+                            $usedTypeIds = $usedTypeIds->reject($record->result_type_id);
+                        }
+                        if ($usedTypeIds->isNotEmpty()) {
+                            $q->whereNotIn('id', $usedTypeIds);
+                        }
+                    })
+                )
                 ->required()
                 ->searchable()
                 ->preload()
@@ -66,7 +83,7 @@ class ResultResource extends \Filament\Resources\Resource
                         return [];
                     }
                     $resultType = ResultType::find($resultTypeId);
-                    if (! $resultType || $resultType->value_type !== 'participant') {
+                    if (! $resultType || $resultType->value_type !== ValueType::Participant) {
                         return [];
                     }
 
@@ -82,19 +99,15 @@ class ResultResource extends \Filament\Resources\Resource
                     }
                     $resultType = ResultType::find($resultTypeId);
 
-                    return $resultType && $resultType->value_type === 'participant';
+                    return $resultType && $resultType->value_type === ValueType::Participant;
                 }),
 
             // Repeater for positions (for value_type = 'positions')
+            // Array index = place (0 = 1st, 1 = 2nd, ...)
+            // Model setAttribute converts [{participant_id: X}] → [X] on save
             Forms\Components\Repeater::make('value')
                 ->label('Positions')
                 ->schema([
-                    Forms\Components\TextInput::make('place')
-                        ->label('Place')
-                        ->numeric()
-                        ->required()
-                        ->minValue(1)
-                        ->maxValue(999),
                     Forms\Components\Select::make('participant_id')
                         ->label('Participant')
                         ->options(function (Get $get) use ($resolvedEventId) {
@@ -104,10 +117,17 @@ class ResultResource extends \Filament\Resources\Resource
                         ->preload()
                         ->required(),
                 ])
-                ->columns(2)
+                ->columns(1)
                 ->defaultItems(1)
                 ->addable()
                 ->deletable()
+                ->reorderable()
+                ->afterStateHydrated(function (Forms\Components\Repeater $component, ?Result $record) {
+                    $value = $record?->value;
+                    if (is_array($value) && !empty($value) && is_int($value[0] ?? null)) {
+                        $component->state(array_map(fn ($id) => ['participant_id' => $id], $value));
+                    }
+                })
                 ->visible(function (Get $get) {
                     $resultTypeId = $get('result_type_id');
                     if (! $resultTypeId) {
@@ -115,7 +135,40 @@ class ResultResource extends \Filament\Resources\Resource
                     }
                     $resultType = ResultType::find($resultTypeId);
 
-                    return $resultType && $resultType->value_type === 'positions';
+                    return $resultType && $resultType->value_type === ValueType::Positions;
+                }),
+
+            // Score select (for value_type = 'score')
+            Forms\Components\Select::make('score')
+                ->label('Score')
+                ->options(function () {
+                    return \App\Models\OutcomeType::where('id', '>=', 4)
+                        ->where('id', '<=', 52)
+                        ->pluck('name', 'name')
+                        ->toArray();
+                })
+                ->searchable()
+                ->preload()
+                ->required()
+                ->visible(function (Get $get) {
+                    $resultTypeId = $get('result_type_id');
+                    if (! $resultTypeId) {
+                        return false;
+                    }
+                    $resultType = ResultType::find($resultTypeId);
+
+                    return $resultType && $resultType->value_type === ValueType::Score;
+                })
+                ->afterStateHydrated(function (Forms\Components\Select $component, ?Result $record) {
+                    if ($record && $record->value && isset($record->value['score'])) {
+                        $component->state($record->value['score']);
+                    }
+                })
+                ->dehydrated(fn ($state) => $state !== null)
+                ->saveRelationshipsUsing(function (?Result $record, $state) {
+                    if ($record && $state) {
+                        $record->update(['value' => ['score' => $state]]);
+                    }
                 }),
 
             Forms\Components\TextInput::make('time')

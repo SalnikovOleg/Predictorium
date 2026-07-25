@@ -12,7 +12,6 @@ class MarketTemplate extends Model
     protected $fillable = [
         'name',
         'description',
-        'category_id',
         'market_type_id',
         'result_type_id',
         'outcome_type_ids',

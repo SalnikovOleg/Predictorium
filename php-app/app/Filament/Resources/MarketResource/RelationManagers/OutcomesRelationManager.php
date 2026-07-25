@@ -53,6 +53,9 @@ class OutcomesRelationManager extends RelationManager
         return $table
             ->recordTitleAttribute('id')
             ->columns([
+                Tables\Columns\TextColumn::make('id')
+                    ->label('id')
+                    ->sortable(),
                 Tables\Columns\TextColumn::make('outcomeType.name')
                     ->label('Type')
                     ->sortable(),
@@ -68,9 +71,9 @@ class OutcomesRelationManager extends RelationManager
                     ->rules(['required', 'numeric', 'min:1.0'])
                     ->step(0.01),
 
-                Tables\Columns\TextColumn::make('result')
+                Tables\Columns\SelectColumn::make('result')
                     ->label('Result')
-                    ->badge()
+                    ->options(OutcomeResult::class)
                     ->placeholder('—'),
             ])
             ->filters([

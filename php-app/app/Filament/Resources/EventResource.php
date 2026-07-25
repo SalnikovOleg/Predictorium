@@ -141,12 +141,12 @@ class EventResource extends \Filament\Resources\Resource
             ]);
     }
 
-    public static function getRelations(): array
-    {
-        return [
-            RelationManagers\ContentsRelationManager::class,
-        ];
-    }
+//    public static function getRelations(): array
+//    {
+//        return [
+//            RelationManagers\ContentsRelationManager::class,
+//        ];
+//    }
 
     public static function getPages(): array
     {

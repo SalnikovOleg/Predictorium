@@ -19,9 +19,9 @@ class StakeResource extends \Filament\Resources\Resource
 
     protected static BackedEnum|string|null $navigationIcon = 'heroicon-o-currency-dollar';
 
-    protected static UnitEnum|string|null $navigationGroup = 'Customers';
+    protected static UnitEnum|string|null $navigationGroup = 'Trading';
 
-    protected static ?int $navigationSort = 50;
+    protected static ?int $navigationSort = 43;
 
     protected static ?string $modelLabel = 'Stake';
 

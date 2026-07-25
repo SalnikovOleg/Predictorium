@@ -12,7 +12,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('category_id');
             $table->string('name');
-            $table->enum('value_type', ['positions', 'participant']);
+            $table->enum('value_type', ['positions', 'participant', 'score']);
             $table->timestamps();
             $table->softDeletes();
         });

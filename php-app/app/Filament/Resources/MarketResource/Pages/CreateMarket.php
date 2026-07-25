@@ -46,30 +46,37 @@ class CreateMarket extends CreateRecord
         $noTypeId = $this->findOutcomeTypeId('no');
         $participantTypeId = $this->findOutcomeTypeId('participant');
 
+        $resultTypeId = $template->result_type_id;
+
         match ($marketTypeId) {
-            1, 2 => $this->createBooleanOutcomes($market, $yesTypeId, $noTypeId),
-            3 => $this->createSelectionOutcomes($market, $participantTypeId),
-            4 => $this->createBinarySelectionOutcomes($market, $participantTypeId),
+            1 => $this->createBooleanOutcomes($market, $yesTypeId, $noTypeId, $resultTypeId),
+            2 => $this->createBooleanOutcomes($market, $yesTypeId, $noTypeId, $resultTypeId, $this->data['participant_id'] ?? null),
+            3 => $this->createSelectionOutcomes($market, $participantTypeId, $resultTypeId),
+            4 => $this->createBinarySelectionOutcomes($market, $participantTypeId, $resultTypeId),
             default => null,
         };
     }
 
-    private function createBooleanOutcomes(Market $market, int $yesTypeId, int $noTypeId): void
+    private function createBooleanOutcomes(Market $market, int $yesTypeId, int $noTypeId, ?int $resultTypeId, ?int $participantId = null): void
     {
         Outcome::create([
             'market_id' => $market->id,
             'outcome_type_id' => $yesTypeId,
+            'participant_id' => $participantId,
+            'result_type_id' => $resultTypeId,
             'coef' => 1.00,
         ]);
 
         Outcome::create([
             'market_id' => $market->id,
             'outcome_type_id' => $noTypeId,
+            'participant_id' => $participantId,
+            'result_type_id' => $resultTypeId,
             'coef' => 1.00,
         ]);
     }
 
-    private function createSelectionOutcomes(Market $market, int $participantTypeId): void
+    private function createSelectionOutcomes(Market $market, int $participantTypeId, ?int $resultTypeId): void
     {
         $participantIds = $this->data['participant_ids'] ?? [];
 
@@ -78,12 +85,13 @@ class CreateMarket extends CreateRecord
                 'market_id' => $market->id,
                 'outcome_type_id' => $participantTypeId,
                 'participant_id' => $participantId,
+                'result_type_id' => $resultTypeId,
                 'coef' => 1.00,
             ]);
         }
     }
 
-    private function createBinarySelectionOutcomes(Market $market, int $participantTypeId): void
+    private function createBinarySelectionOutcomes(Market $market, int $participantTypeId, ?int $resultTypeId): void
     {
         $participantAId = $this->data['participant_a_id'] ?? null;
         $participantBId = $this->data['participant_b_id'] ?? null;
@@ -93,6 +101,7 @@ class CreateMarket extends CreateRecord
                 'market_id' => $market->id,
                 'outcome_type_id' => $participantTypeId,
                 'participant_id' => $participantAId,
+                'result_type_id' => $resultTypeId,
                 'coef' => 1.00,
             ]);
         }
@@ -102,6 +111,7 @@ class CreateMarket extends CreateRecord
                 'market_id' => $market->id,
                 'outcome_type_id' => $participantTypeId,
                 'participant_id' => $participantBId,
+                'result_type_id' => $resultTypeId,
                 'coef' => 1.00,
             ]);
         }
