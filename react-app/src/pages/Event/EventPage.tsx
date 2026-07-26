@@ -5,6 +5,7 @@ import { useAuthStore, useRequireAuth } from '@/features/auth'
 import { H1, H2, LoadingSpinner, ErrorMessage, TournamentHr } from '@/components/ui/common'
 import { DateLine } from '@/components/ui/date'
 import { MarketCard } from '@/features/event/ui/MarketCard'
+import { MarketScoreCard } from '@/features/event/ui/MarketScoreCard'
 
 const CURRENT_GROUP_ID = 1
 
@@ -98,19 +99,30 @@ export function EventPage() {
             </div>
           )}
 
-          {event.markets.length === 0 ? (
+          {event.markets.filter((m) => m.outcomes.length > 0).length === 0 ? (
             <p className="text-gray-400">No markets available for this event.</p>
           ) : (
             <div className="space-y-4">
-              {event.markets.map((market) => (
-                <MarketCard
-                  key={market.id}
-                  market={market}
-                  selectedOutcomeId={selectedOutcomes[market.id] ?? null}
-                  onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
-                  isPending={createStake.isPending}
-                  isDisabled={isStakesLocked}
-                />
+              {event.markets.filter((m) => m.outcomes.length > 0).map((market) => (
+                market.market_type_id === 5 ? (
+                  <MarketScoreCard
+                    key={market.id}
+                    market={market}
+                    selectedOutcomeId={selectedOutcomes[market.id] ?? null}
+                    onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
+                    isPending={createStake.isPending}
+                    isDisabled={isStakesLocked}
+                  />
+                ) : (
+                  <MarketCard
+                    key={market.id}
+                    market={market}
+                    selectedOutcomeId={selectedOutcomes[market.id] ?? null}
+                    onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
+                    isPending={createStake.isPending}
+                    isDisabled={isStakesLocked}
+                  />
+                )
               ))}
             </div>
           )}

@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import { cn } from '@/lib/utils'
-import type { Market } from '../types'
+import type { Market, Outcome } from '../types'
 import { MarketOutcomeButton } from './MarketOutcomeButton'
 import { CurrentStatsPopover } from './CurrentStatsPopover'
 import {H3} from '@/components/ui/common'
 
-interface MarketCardProps {
+interface MarketScoreCardProps {
   market: Market
   selectedOutcomeId: number | null
   onSelectOutcome: (outcomeId: number) => void
@@ -13,16 +13,23 @@ interface MarketCardProps {
   isDisabled?: boolean
 }
 
-export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPending, isDisabled }: MarketCardProps) {
+function toMatrix7x7(outcomes: Outcome[]): (Outcome | null)[][] {
+  const matrix: (Outcome | null)[][] = []
+  for (let row = 0; row < 7; row++) {
+    const start = row * 7
+    const slice = outcomes.slice(start, start + 7)
+    while (slice.length < 7) slice.push(null)
+    matrix.push(slice)
+  }
+  return matrix
+}
+
+export function MarketScoreCard({ market, selectedOutcomeId, onSelectOutcome, isPending, isDisabled }: MarketScoreCardProps) {
   const [showAll, setShowAll] = useState(false)
   const [showStats, setShowStats] = useState(false)
-  const isMultiOutcome = market.market_type_id === 3 && market.outcomes.length > 2
- // const isCompactOutcome = market.market_type_id === 5 && market.outcomes.length > 2
-  const visibleOutcomes = isMultiOutcome && !showAll
-    ? market.outcomes.slice(0, 8)
-    // : isCompactOutcome && !showAll
-    //   ? market.outcomes.slice(0, 21)
-      : market.outcomes
+  const matrix = toMatrix7x7(market.outcomes)
+  const visibleRows = showAll ? matrix : matrix.slice(0, 5)
+  const visibleCols = showAll ? 7 : 5
 
   return (
     <div className="relative rounded-lg border border-[--color-border] bg-[#0a1e24]/60 p-4">
@@ -66,43 +73,35 @@ export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPendi
 
       <div className={cn(
         "gap-2",
-        isMultiOutcome
-          ? "grid grid-cols-2 md:grid-cols-4"
-          // : isCompactOutcome
-          //   ? cn("grid grid-cols-7", !showAll && "max-h-[2.75rem] overflow-hidden")
-            : "grid grid-cols-2"
+        showAll ? "grid grid-cols-7" : "grid grid-cols-5"
       )}>
-        {visibleOutcomes.map((outcome) => (
-          <MarketOutcomeButton
-            key={outcome.id}
-            outcome={outcome}
-            isSelected={selectedOutcomeId === outcome.id}
-            isLoading={isPending && selectedOutcomeId === outcome.id}
-            isDisabled={isDisabled || (isPending && selectedOutcomeId !== outcome.id)}
-            onClick={() => onSelectOutcome(outcome.id)}
-          />
-        ))}
+        {visibleRows.map((row, rowIdx) =>
+          row.slice(0, visibleCols).map((outcome, colIdx) =>
+            outcome ? (
+              <MarketOutcomeButton
+                key={outcome.id}
+                outcome={outcome}
+                isSelected={selectedOutcomeId === outcome.id}
+                isLoading={isPending && selectedOutcomeId === outcome.id}
+                isDisabled={isDisabled || (isPending && selectedOutcomeId !== outcome.id)}
+                onClick={() => onSelectOutcome(outcome.id)}
+              />
+            ) : (
+              <div key={`empty-${rowIdx}-${colIdx}`} />
+            )
+          )
+        )}
       </div>
 
-      {isMultiOutcome && market.outcomes.length > 8 && (
-        <button
-          type="button"
-          onClick={() => setShowAll(!showAll)}
-          className="mt-3 w-full py-2 text-sm text-gray-400 hover:text-white transition-colors border border-[--color-border] rounded-lg hover:bg-[--color-border]/20"
-        >
-          {showAll ? 'Show less' : `+ ${market.outcomes.length - 8} more`}
-        </button>
-      )}
-
-      {/* {isCompactOutcome && market.outcomes.length > 21 && (
+      {market.outcomes.length > 25 && (
         <button
           type="button"
           onClick={() => setShowAll(!showAll)}
           className="mt-3 w-full py-4 text-base font-semibold text-gray-300 hover:text-white transition-colors border border-[--color-border] rounded-lg hover:bg-[--color-border]/20"
         >
-          {showAll ? 'Show less' : `+ ${market.outcomes.length - 21} more`}
+          {showAll ? 'Show less' : `+ ${market.outcomes.length - 25} more`}
         </button>
-      )} */}
+      )}
     </div>
   )
 }

@@ -32,7 +32,7 @@ export function TournamentCard({ tournament }: { tournament: TournamentSummary }
 
         </div>
 
-        <TournamentIcon />
+        {/* <TournamentIcon /> */}
       </Card>  
     </Link>
   )

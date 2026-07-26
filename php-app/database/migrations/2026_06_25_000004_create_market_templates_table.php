@@ -14,7 +14,7 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->foreignId('market_type_id')->constrained();
             $table->json('outcome_type_ids')->nullable();
-            $table->integer('result_type_id');
+            $table->integer('result_type_id')->nullable();
             $table->integer('param1')->nullable();
             $table->integer('param2')->nullable();
             $table->timestamps();

@@ -13,7 +13,6 @@ class OutcomeResource extends JsonResource
             'id' => $this->id,
             'coef' => $this->coef,
             'result' => $this->result?->value,
-            'outcome_type_id' => $this->outcomeType->id,
             'name' => $this->participant->name ?? $this->outcomeType->name,
         ];
     }

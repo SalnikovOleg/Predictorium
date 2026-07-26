@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('taxonomies', function (Blueprint $table) {
             $table->id();
-            $table->enum('type', ['community', 'country']);
+            $table->enum('type', ['community', 'country', 'general']);
             $table->string('name');
             $table->string('icon');
             $table->timestamps();

@@ -37,7 +37,7 @@ export function TournamentPage() {
           ) : (
             <div className="space-y-4">
               {tournament.events.map((event) => (
-                <EventCard key={event.id} event={event} />
+                <EventCard key={event.id} event={event} categorySlug={tournament.category.slug} />
               ))}
             </div>
           )}

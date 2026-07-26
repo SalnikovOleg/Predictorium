@@ -57,4 +57,12 @@ class StakeRepository
             ->groupBy('outcome_id')
             ->get();
     }
+
+    public function getByMarketAndOutcome(int $marketId, int $outcomeId): Collection
+    {
+        return $this->model
+            ->where('market_id', $marketId)
+            ->where('outcome_id', $outcomeId)
+            ->get();
+    }
 }

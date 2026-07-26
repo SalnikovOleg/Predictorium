@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('categories', function (Blueprint $table) {
             $table->id();
-            $table->enum('taxonomy_type', ['community', 'country']);
+            $table->enum('taxonomy_type', ['community', 'country', 'general']);
             $table->string('name');
             $table->string('slug');
             $table->boolean('is_active')->default(true);
