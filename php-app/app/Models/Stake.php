@@ -48,4 +48,9 @@ class Stake extends Model
     {
         return $this->belongsTo(Outcome::class);
     }
+
+    public function stakeItems()
+    {
+        return $this->hasMany(StakeItem::class);
+    }
 }

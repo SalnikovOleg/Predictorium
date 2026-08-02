@@ -44,9 +44,11 @@ MarketTypes: Defines the business logic for templates:
 
 2 (Participant-based Boolean): Yes/No, but the statement incorporates a specific participant name.
 
-3 (Selection): Outcomes are a list of participants.
+3 (Selection participants): Outcomes are a list of participants.
 
 4 (Binary Selection): Two outcomes, both are participants.
+
+5 (Selection outcome types): Outcomes are a list of outcome_types 
 
 3. Outcomes
 Outcomes: Specific betting options within a market.

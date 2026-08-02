@@ -11,7 +11,7 @@ export function CurrentStatsPopover({ marketId, onClose }: CurrentStatsPopoverPr
   return (
     <>
       <div className="fixed inset-0 z-40" onClick={onClose} />
-      <div className="absolute left-0 top-full mt-2 z-50 w-72 rounded-lg border border-[--color-border]/60 bg-[#0a1e24]/95 p-4 shadow-xl shadow-black/30">
+      <div className="absolute left-0 top-full mt-2 z-50 w-72 rounded-lg border border-[var(--color-border)]/60 bg-[#0a1e24]/95 p-4 shadow-xl shadow-black/30">
         <h4 className="text-sm font-semibold text-white mb-3">Current stats</h4>
 
         {isLoading && (

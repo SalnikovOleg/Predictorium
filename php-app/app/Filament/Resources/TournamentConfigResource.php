@@ -3,7 +3,9 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\TournamentConfigResource\Pages;
+use App\Models\Category;
 use App\Models\MarketTemplate;
+use App\Models\Taxonomy;
 use App\Models\TournamentConfig;
 use BackedEnum;
 use Filament\Actions;
@@ -38,7 +40,9 @@ class TournamentConfigResource extends \Filament\Resources\Resource
                             ->relationship('category', 'name')
                             ->required()
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->reactive()
+                            ->afterStateUpdated(fn (callable $set) => $set('taxonomy_ids', [])),
                         Forms\Components\TextInput::make('name')
                             ->required()
                             ->maxLength(255),
@@ -49,6 +53,23 @@ class TournamentConfigResource extends \Filament\Resources\Resource
                             ->multiple()
                             ->searchable()
                             ->preload(),
+                        Forms\Components\Select::make('taxonomy_ids')
+                            ->options(function (callable $get) {
+                                $categoryId = $get('category_id');
+                                if (! $categoryId) {
+                                    return Taxonomy::pluck('name', 'id');
+                                }
+                                $category = Category::find($categoryId);
+                                if (! $category) {
+                                    return Taxonomy::pluck('name', 'id');
+                                }
+                                return Taxonomy::where('type', $category->taxonomy_type)
+                                    ->pluck('name', 'id');
+                            })
+                            ->multiple()
+                            ->searchable()
+                            ->preload()
+                            ->label('Taxonomy IDs'),
                     ]),
             ]);
     }

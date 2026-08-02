@@ -17,10 +17,10 @@ export function MarketOutcomeButton({ outcome, isSelected, isLoading, isDisabled
       disabled={isLoading || isDisabled}
       className={cn(
         "flex items-center justify-between px-4 py-3 rounded-lg border transition-all duration-200",
-        "hover:bg-[val(--color-border)]/30",
+        "hover:bg-[var(--color-border)]/30",
         isSelected
           ? "border-accent bg-accent/20 text-white"
-          : "border-[val(--color-border)] bg-[#0a1e24]/40 text-gray-300 hover:border-gray-500",
+          : "border-[var(--color-border)] bg-[#0a1e24]/40 text-gray-300 hover:border-[var(--color-accent)]",
         isLoading && "opacity-70 cursor-wait",
         isDisabled && "opacity-50 cursor-not-allowed"
       )}

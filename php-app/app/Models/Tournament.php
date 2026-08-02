@@ -11,7 +11,6 @@ class Tournament extends Model
 {
     protected $fillable = [
         'category_id',
-        'taxonomy_id',
         'name',
         'slug',
         'description',
@@ -37,11 +36,6 @@ class Tournament extends Model
     public function category()
     {
         return $this->belongsTo(Category::class);
-    }
-
-    public function taxonomy()
-    {
-        return $this->belongsTo(Taxonomy::class);
     }
 
     public function config()

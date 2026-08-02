@@ -25,10 +25,9 @@ class StoreStakeRequest extends FormRequest
                     $fail('The event is not active.');
                 }
             }],
-            'market_id' => ['required', 'integer', 'exists:markets,id'],
-            'outcome_id' => ['required', 'integer', 'exists:outcomes,id'],
-            'outcome_ids' => ['nullable', 'array'],
-            'outcome_ids.*' => ['integer', 'exists:outcomes,id'],
+            'market_id' => ['required', 'integer'],
+            'outcome_ids' => ['required', 'array'],
+            'outcome_ids.*' => ['integer'],
         ];
     }
 }

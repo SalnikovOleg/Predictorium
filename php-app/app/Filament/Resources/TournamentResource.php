@@ -66,17 +66,7 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->required()
                             ->searchable()
                             ->preload()
-                            ->reactive()
-                            ->afterStateUpdated(fn ($state, $set) => $set('taxonomy_id', null)),
-                        Forms\Components\Select::make('taxonomy_id')
-                            ->label('Community/country')
-                            ->relationship('taxonomy', 'name')
-                            ->options(fn ($get) => \App\Models\Taxonomy::query()
-                                ->where('type', \App\Models\Category::find($get('category_id'))?->taxonomy_type)
-                                ->pluck('name', 'id'))
-                            ->required()
-                            ->searchable()
-                            ->preload(),
+                            ->reactive(),
                         Forms\Components\Select::make('config_id')
                             ->relationship('config', 'name')
                             ->required()
@@ -87,13 +77,13 @@ class TournamentResource extends \Filament\Resources\Resource
                             ->options(TournamentStatus::class)
                             ->default(TournamentStatus::Draft)
                             ->required(),
+                        Forms\Components\TextInput::make('ext_id')
+                            ->label('External ID')
+                            ->maxLength(255),
                         Forms\Components\DateTimePicker::make('start_date')
                             ->format('Y-m-d H:i'),
                         Forms\Components\DateTimePicker::make('end_date')
                             ->format('Y-m-d H:i'),
-                        Forms\Components\TextInput::make('ext_id')
-                            ->label('External ID')
-                            ->maxLength(255),
                     ])->columns(2),
             ]);
     }

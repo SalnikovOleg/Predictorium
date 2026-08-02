@@ -57,7 +57,10 @@ class TaxonomySeeder extends Seeder
             ["country", "Шотландия"],
             ["country", "Эквадор"],
             ["country", "ЮАР"],
-            ["country", "Япония"]
+            ["country", "Япония"],
+            ["general", "Persons"],
+            ["general", "Brands"],
+            ["general", "Games"],
         ];
 
         DB::table('result_types')->insert($values);

@@ -14,6 +14,7 @@ class TournamentConfig extends Model
         'name',
         'rules_json',
         'market_template_ids',
+        'taxonomy_ids',
     ];
 
     protected function casts(): array
@@ -21,6 +22,7 @@ class TournamentConfig extends Model
         return [
             'rules_json' => 'array',
             'market_template_ids' => 'array',
+            'taxonomy_ids' => 'array',
         ];
     }
 

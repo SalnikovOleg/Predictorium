@@ -5,6 +5,8 @@ namespace App\Filament\Resources;
 use App\Enums\EventStatus;
 use App\Filament\Resources\EventResource\Pages;
 use App\Models\Event;
+use App\Models\Participant;
+use App\Models\Tournament;
 use BackedEnum;
 use Filament\Actions;
 use Filament\Forms;
@@ -71,16 +73,29 @@ class EventResource extends \Filament\Resources\Resource
                 Section::make('Participants')
                     ->schema([
                         Forms\Components\Select::make('participants')
-                            ->relationship('participants', 'name')
                             ->label('Event Participants')
                             ->multiple()
                             ->searchable()
                             ->preload()
-                            ->options(fn ($get) => \App\Models\Participant::query()
-                                ->with('taxonomy')
-                                ->where('taxonomy_id', \App\Models\Tournament::find($get('tournament_id'))?->taxonomy_id)
-                                ->get()
-                                ->mapWithKeys(fn ($p) => [$p->id => "{$p->name} ({$p->taxonomy->name})"])),
+                            ->relationship('participants', 'name')
+                            ->options(function ($get) {
+                                $tournamentId = $get('tournament_id');
+                                if (!$tournamentId) {
+                                    return [];
+                                }
+                                $tournament = Tournament::with('config')->find($tournamentId);
+                                $taxonomyIds = $tournament?->config?->taxonomy_ids ?? [];
+                                
+                                if (empty($taxonomyIds)) {
+                                    return [];
+                                }
+                                
+                                return Participant::query()
+                                    ->with('taxonomy')
+                                    ->whereIn('taxonomy_id', $taxonomyIds)
+                                    ->get()
+                                    ->mapWithKeys(fn ($p) => [$p->id => "{$p->name} ({$p->taxonomy->name})"]);
+                            }),
                     ])
             ]);
     }
