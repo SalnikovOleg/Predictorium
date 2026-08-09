@@ -27,7 +27,7 @@ export async function createStake(payload: {
   user_id: number
   event_id: number
   market_id: number
-  outcome_id: number
+  outcome_ids: number[]
 }): Promise<void> {
   await apiClient.post('/stake', payload)
 }

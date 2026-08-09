@@ -23,11 +23,16 @@ class StakeController extends Controller
             $request->integer('event_id'),
         );
 
-        $data = $stakes->map(fn ($stake) => [
-            'market_id' => $stake->market_id,
-            'outcome_id' => $stake->outcome_id,
-            'outcome_ids' => $stake->outcome_ids,
-        ]);
+        $data = $stakes->map(function ($stake) {
+            return [
+                'id' => $stake->id,
+                'stake_items' => $stake->stakeItems->map(fn ($item) => [
+                    'market_id' => $item->market_id,
+                    'outcome_id' => $item->outcome_id,
+                    'result' => $item->result,
+                ]),
+            ];
+        });
 
         return response()->json([
             'status' => true,

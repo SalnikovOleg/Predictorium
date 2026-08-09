@@ -20,8 +20,6 @@ return new class extends Migration
 
             $table->index(['group_id', 'user_id', 'event_id']);
         });
-
-
     }
 
     public function down(): void

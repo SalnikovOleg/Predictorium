@@ -35,10 +35,23 @@ export interface Market {
   outcomes: Outcome[]
 }
 
-export interface Stake {
+export interface StakeItem {
   market_id: number
   outcome_id: number
-  outcome_ids: number[] | null
+  result: string | null
+}
+
+export interface Stake {
+  id: number
+  stake_items: StakeItem[]
+}
+
+export interface CreateStakePayload {
+  group_id: number
+  user_id: number
+  event_id: number
+  market_id: number
+  outcome_ids: number[]
 }
 
 export interface MarketStat {

@@ -1,2 +1,0 @@
-EventPage.tsx method handleSelectOutcome. In method createStake need pass outcome_ids as array of outcome ids.
-According to market.param1 need allow select 1 (if param1 is null) or number of outcomes with related to  market.param1. 

@@ -8,13 +8,13 @@ import {H3} from '@/components/ui/common'
 
 interface MarketCardProps {
   market: Market
-  selectedOutcomeId: number | null
+  selectedOutcomeIds: number[]
   onSelectOutcome: (outcomeId: number) => void
   isPending?: boolean
   isDisabled?: boolean
 }
 
-export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPending, isDisabled }: MarketCardProps) {
+export function MarketCard({ market, selectedOutcomeIds, onSelectOutcome, isPending, isDisabled }: MarketCardProps) {
   const [showAll, setShowAll] = useState(false)
   const [showStats, setShowStats] = useState(false)
   const isMultiOutcome = market.market_type_id === 3 && market.outcomes.length > 2
@@ -23,7 +23,7 @@ export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPendi
     : market.outcomes
 
   return (
-    <div className="relative rounded-lg border border-[--color-border] bg-[#0a1e24]/60 p-4">
+    <div data-id={market.id} className="relative rounded-lg border border-[--color-border] bg-[#0a1e24]/60 p-4">
       <div className="flex items-center justify-between mb-3">
         <div className="flex items-center gap-2">
           <H3 className="text-lg">{market.name}</H3>
@@ -54,9 +54,9 @@ export function MarketCard({ market, selectedOutcomeId, onSelectOutcome, isPendi
           <MarketOutcomeButton
             key={outcome.id}
             outcome={outcome}
-            isSelected={selectedOutcomeId === outcome.id}
-            isLoading={isPending && selectedOutcomeId === outcome.id}
-            isDisabled={isDisabled || (isPending && selectedOutcomeId !== outcome.id)}
+            isSelected={selectedOutcomeIds.includes(outcome.id)}
+            isLoading={isPending && selectedOutcomeIds.includes(outcome.id)}
+            isDisabled={isDisabled || (isPending && !selectedOutcomeIds.includes(outcome.id))}
             onClick={() => onSelectOutcome(outcome.id)}
           />
         ))}

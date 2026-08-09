@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useMemo } from 'react'
 import { useParams, Link } from 'react-router'
 import { useEvent, useStakes, useCreateStake } from '@/features/event'
 import { useAuthStore, useRequireAuth } from '@/features/auth'
@@ -15,7 +15,6 @@ export function EventPage() {
   const createStake = useCreateStake()
   const user = useAuthStore((s) => s.user)
   const { requireAuth } = useRequireAuth()
-  const [selectedOutcomes, setSelectedOutcomes] = useState<Record<number, number | null>>({})
 
   const { data: stakes } = useStakes(
     CURRENT_GROUP_ID,
@@ -23,15 +22,71 @@ export function EventPage() {
     data?.id,
   )
 
-  useEffect(() => {
-    if (!stakes || stakes.length === 0) return
-
-    const initial: Record<number, number | null> = {}
+  // Derive selected outcomes from stakes data (server state)
+  const serverSelectedOutcomes = useMemo(() => {
+    if (!stakes || stakes.length === 0) return {}
+    const initial: Record<number, number[]> = {}
     for (const stake of stakes) {
-      initial[stake.market_id] = stake.outcome_id
+      for (const item of stake.stake_items) {
+        if (item.outcome_id) {
+          initial[item.market_id] = [...(initial[item.market_id] ?? []), item.outcome_id]
+        }
+      }
     }
-    setSelectedOutcomes(initial)
+    return initial
   }, [stakes])
+
+  // Local state for optimistic updates (merges with server state)
+  const [localSelections, setLocalSelections] = useState<Record<number, number[]>>({})
+
+  // Combined selected outcomes: server + local optimistic updates
+  const selectedOutcomes = useMemo(() => {
+    const merged: Record<number, number[]> = { ...serverSelectedOutcomes }
+    for (const [marketId, outcomeIds] of Object.entries(localSelections)) {
+      merged[Number(marketId)] = outcomeIds
+    }
+    return merged
+  }, [serverSelectedOutcomes, localSelections])
+
+  const handleSelectOutcome = (marketId: number, outcomeId: number) => {
+    if (isLoading || error || !data) return
+    if (data.status !== 'active') return
+
+    requireAuth(() => {
+      const market = data.markets.find((m) => m.id === marketId)
+      if (!market) return
+
+      const maxSelections = market.param1 ?? 1
+      const currentSelected = selectedOutcomes[marketId] ?? []
+      const isSelected = currentSelected.includes(outcomeId)
+
+      let newSelected: number[]
+      if (isSelected) {
+        // Deselect
+        newSelected = currentSelected.filter((id) => id !== outcomeId)
+      } else {
+        // Select - check limit
+        if (currentSelected.length >= maxSelections) return
+        newSelected = [...currentSelected, outcomeId]
+      }
+
+      // Optimistic update for immediate UI feedback
+      setLocalSelections((prev) => ({
+        ...prev,
+        [marketId]: newSelected,
+      }))
+
+      if (newSelected.length > 0 && user) {
+        createStake.mutate({
+          group_id: CURRENT_GROUP_ID,
+          user_id: user.id,
+          event_id: data.id,
+          market_id: marketId,
+          outcome_ids: newSelected,
+        })
+      }
+    })
+  }
 
   if (isLoading) {
     return <LoadingSpinner />
@@ -48,30 +103,6 @@ export function EventPage() {
   }
 
   const isStakesLocked = event.status !== 'active'
-
-  const handleSelectOutcome = (marketId: number, outcomeId: number) => {
-    if (isStakesLocked) return
-
-    requireAuth(() => {
-      const currentSelected = selectedOutcomes[marketId]
-      const newSelected = currentSelected === outcomeId ? null : outcomeId
-
-      setSelectedOutcomes((prev) => ({
-        ...prev,
-        [marketId]: newSelected,
-      }))
-
-      if (newSelected !== null && user) {
-        createStake.mutate({
-          group_id: CURRENT_GROUP_ID,
-          user_id: user.id,
-          event_id: event.id,
-          market_id: marketId,
-          outcome_id: newSelected,
-        })
-      }
-    })
-  }
 
   return (
     <div className="space-y-6">
@@ -108,7 +139,7 @@ export function EventPage() {
                   <MarketScoreCard
                     key={market.id}
                     market={market}
-                    selectedOutcomeId={selectedOutcomes[market.id] ?? null}
+                    selectedOutcomeIds={selectedOutcomes[market.id] ?? []}
                     onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
                     isPending={createStake.isPending}
                     isDisabled={isStakesLocked}
@@ -117,7 +148,7 @@ export function EventPage() {
                   <MarketCard
                     key={market.id}
                     market={market}
-                    selectedOutcomeId={selectedOutcomes[market.id] ?? null}
+                    selectedOutcomeIds={selectedOutcomes[market.id] ?? []}
                     onSelectOutcome={(outcomeId) => handleSelectOutcome(market.id, outcomeId)}
                     isPending={createStake.isPending}
                     isDisabled={isStakesLocked}

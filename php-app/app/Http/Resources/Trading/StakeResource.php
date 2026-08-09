@@ -14,9 +14,13 @@ class StakeResource extends JsonResource
             'group_id' => $this->group_id,
             'user_id' => $this->user_id,
             'event_id' => $this->event_id,
-            'market_id' => $this->market_id,
-            'outcome_id' => $this->outcome_id,
-            'outcome_ids' => $this->outcome_ids,
+            'stake_items' =>$this->whenLoaded('stakeItems', function () {
+                return $this->stakeItems->map(fn ($item) => [
+                    'market_id'  => $item->market_id,
+                    'outcome_id' => $item->outcome_id,
+                    'result'     => $item->result,
+                ]);
+            }),
         ];
     }
 }

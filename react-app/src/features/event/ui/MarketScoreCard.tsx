@@ -8,7 +8,7 @@ import {H3} from '@/components/ui/common'
 
 interface MarketScoreCardProps {
   market: Market
-  selectedOutcomeId: number | null
+  selectedOutcomeIds: number[]
   onSelectOutcome: (outcomeId: number) => void
   isPending?: boolean
   isDisabled?: boolean
@@ -18,14 +18,14 @@ function toMatrix7x7(outcomes: Outcome[]): (Outcome | null)[][] {
   const matrix: (Outcome | null)[][] = []
   for (let row = 0; row < 7; row++) {
     const start = row * 7
-    const slice = outcomes.slice(start, start + 7)
+    const slice: (Outcome | null)[] = outcomes.slice(start, start + 7)
     while (slice.length < 7) slice.push(null)
     matrix.push(slice)
   }
   return matrix
 }
 
-export function MarketScoreCard({ market, selectedOutcomeId, onSelectOutcome, isPending, isDisabled }: MarketScoreCardProps) {
+export function MarketScoreCard({ market, selectedOutcomeIds, onSelectOutcome, isPending, isDisabled }: MarketScoreCardProps) {
   const [showAll, setShowAll] = useState(false)
   const [showStats, setShowStats] = useState(false)
   const matrix = toMatrix7x7(market.outcomes)
@@ -64,9 +64,9 @@ export function MarketScoreCard({ market, selectedOutcomeId, onSelectOutcome, is
               <MarketOutcomeButton
                 key={outcome.id}
                 outcome={outcome}
-                isSelected={selectedOutcomeId === outcome.id}
-                isLoading={isPending && selectedOutcomeId === outcome.id}
-                isDisabled={isDisabled || (isPending && selectedOutcomeId !== outcome.id)}
+                isSelected={selectedOutcomeIds.includes(outcome.id)}
+                isLoading={isPending && selectedOutcomeIds.includes(outcome.id)}
+                isDisabled={isDisabled || (isPending && !selectedOutcomeIds.includes(outcome.id))}
                 onClick={() => onSelectOutcome(outcome.id)}
               />
             ) : (

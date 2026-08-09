@@ -11,7 +11,7 @@ class StakeRepository
         protected Stake $model,
     ) {}
 
-    public function findExisting(
+    public function findExistingByStakeItemMarket(
         int $groupId,
         int $userId,
         int $eventId,
@@ -21,7 +21,9 @@ class StakeRepository
             ->where('group_id', $groupId)
             ->where('user_id', $userId)
             ->where('event_id', $eventId)
-            ->where('market_id', $marketId)
+            ->whereHas('stakeItems', function ($query) use ($marketId) {
+                $query->where('market_id', $marketId);
+            })
             ->first();
     }
 
@@ -34,6 +36,7 @@ class StakeRepository
             ->where('group_id', $groupId)
             ->where('user_id', $userId)
             ->where('event_id', $eventId)
+            ->with('stakeItems')
             ->get();
     }
 
@@ -52,9 +55,10 @@ class StakeRepository
     public function getStatByMarketId(int $marketId): Collection
     {
         return $this->model
-            ->selectRaw('outcome_id, SUM(sum_in) as total_stakes')
-            ->where('market_id', $marketId)
-            ->groupBy('outcome_id')
+            ->join('stake_items', 'stakes.id', '=', 'stake_items.stake_id')
+            ->where('stake_items.market_id', $marketId)
+            ->selectRaw('stake_items.outcome_id, SUM(stakes.sum_in) as total_stakes')
+            ->groupBy('stake_items.outcome_id')
             ->get();
     }
 

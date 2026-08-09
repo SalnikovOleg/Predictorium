@@ -12,6 +12,7 @@ interface MarketOutcomeButtonProps {
 export function MarketOutcomeButton({ outcome, isSelected, isLoading, isDisabled, onClick }: MarketOutcomeButtonProps) {
   return (
     <button
+      data-id={outcome.id}
       type="button"
       onClick={onClick}
       disabled={isLoading || isDisabled}

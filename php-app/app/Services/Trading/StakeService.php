@@ -67,32 +67,29 @@ class StakeService
             $marketTypeId,
             $param1
         ) {
-            $stake = $this->repository->findExisting($groupId, $userId, $eventId, $marketId);
+            $stake = $this->repository->findExistingByStakeItemMarket($groupId, $userId, $eventId, $marketId);
 
             if ($stake) {
-                $this->updateStakeItems($stake, $outcomeIds, $marketTypeId, $param1);
-                return $stake->fresh();
+                $this->updateStakeItems($stake, $marketId, $outcomeIds, $marketTypeId, $param1);
+                return $stake->fresh('stakeItems');
             }
 
             $stake = $this->repository->create([
                 'group_id' => $groupId,
                 'user_id' => $userId,
                 'event_id' => $eventId,
-                'market_id' => $marketId,
-                'outcome_id' => $outcomeIds[0] ?? null,
-                'sum_in' => 0,
-                'coef' => 0,
+                'sum_in' => 1,
                 'result' => null,
                 'sum_out' => 0,
             ]);
 
-            $this->createStakeItems($stake->id, $outcomeIds, $marketId, $marketTypeId, $param1);
+            $this->createStakeItems($stake->id, $marketId, $outcomeIds, $marketTypeId, $param1);
 
-            return $stake->fresh();
+            return $stake->fresh('stakeItems');
         });
     }
 
-    private function createStakeItems(int $stakeId, array $outcomeIds, int $marketId, ?int $marketTypeId, int $param1): void
+    private function createStakeItems(int $stakeId, int $marketId, array $outcomeIds, ?int $marketTypeId, int $param1): void
     {
         $items = [];
 
@@ -107,7 +104,7 @@ class StakeService
                 'stake_id' => $stakeId,
                 'market_id' => $marketId,
                 'outcome_id' => $outcomeId,
-                'coef' => 0,
+                'coef' => 1,
             ];
         }
 
@@ -116,7 +113,7 @@ class StakeService
         }
     }
 
-    private function updateStakeItems(Stake $stake, array $outcomeIds, ?int $marketTypeId, int $param1): void
+    private function updateStakeItems(Stake $stake, int $marketId, array $outcomeIds, ?int $marketTypeId, int $param1): void
     {
         $existingItems = StakeItem::where('stake_id', $stake->id)->pluck('outcome_id')->toArray();
 
@@ -134,9 +131,9 @@ class StakeService
             foreach ($toAdd as $outcomeId) {
                 $items[] = [
                     'stake_id' => $stake->id,
-                    'market_id' => $stake->market_id,
+                    'market_id' => $marketId,
                     'outcome_id' => $outcomeId,
-                    'coef' => 0,
+                    'coef' => 1,
                 ];
             }
             StakeItem::insert($items);
